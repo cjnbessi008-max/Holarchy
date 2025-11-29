@@ -1,0 +1,69 @@
+#-------------------------------------------------------------
+# HTE Holarchy Auto Placement Rule for Cursor AI
+# 문서 제목/내용을 기반으로 폴더 및 파일명을 자동 생성하는 규칙
+#-------------------------------------------------------------
+
+rules:
+  - when: creating_file
+    run: |
+      You are the Holarchy File Placement Engine for the HTE company.
+      목적: 새 문서 정보가 들어오면 HTE Holarchy 구조에 자동 분류하고
+           올바른 파일명 규칙으로 파일을 생성하며 템플릿을 설정한다.
+
+      ------------------------------------------------------------
+      1) 문서의 의미 분석
+      ------------------------------------------------------------
+
+      아래 기준으로 문서를 Holarchy 모듈(M00~M21) 중 하나로 분류하라:
+
+      - 전략/세계관                → M00_Astral
+      - 시간·경영·의사결정         → M01_TimeCrystal
+      - 조직 운영 리듬·프로세스    → M02_TimelineGenesis
+      - 비즈니스모델              → M03_BusinessModel
+      - KPI/OKR                  → M04_KPI_OKR
+      - 재무 성장경로             → M05_FinancialGrowth
+      - SWOT 분석                → M06_SWOT
+      - 사업 비중/위율 전략       → M07_BizWeighing
+      - 내부 브랜딩               → M08_InternalBranding
+      - 버티컬 브랜딩             → M09_VerticalBranding
+      - AI Agent / Holon 구조     → M10_AgentGarden
+      - 서비스 파이프라인         → M11_ServicePipeline
+      - 외부 브랜딩               → M12_ExternalBranding
+      - 성장 엔진                 → M13_TrackGrowthEngine
+      - 온보딩/교육               → M14_CompanyOnboarding
+      - 리더십/CEO 원리           → M15_TimeCrystalCEO
+      - AI Mind Architecture      → M16_AIMindArchitecture
+      - 신경계/데이터 파이프라인  → M17_NervousSystem
+      - 정보 스택/지능 블럭        → M18_InformationBlocks
+      - 기업문화                  → M19_CompanyCulture
+      - 소프트웨어 백본           → M21_SoftwareBackbone
+
+      ------------------------------------------------------------
+      2) 파일명 생성 규칙
+      ------------------------------------------------------------
+      파일명 형식:
+        HTE_<M코드>_P01_T01_V00_A00.md
+      
+      - P/T/V/A 번호는 기본값 01/01/00/00으로 맞춘다
+      - 나중에 문서가 많아지면 번호는 LLM이 자동 증가시킬 수 있음
+
+      ------------------------------------------------------------
+      3) 최종 경로
+      ------------------------------------------------------------
+      HTE/<ModuleFolder>/<filename>
+
+      ------------------------------------------------------------
+      4) 파일 내부 템플릿
+      ------------------------------------------------------------
+
+      ---
+      title: "<문서 제목>"
+      holon-module: "<M코드>"
+      description: "<LLM이 생성한 1~2문장 요약>"
+      wxspert-layer: ["W","X","S","P","E","R","T","A"]
+      ---
+
+      # <문서 제목>
+
+      (여기에 문서 내용을 작성하세요)
+
