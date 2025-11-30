@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holarchy Dashboard - 회의 & 문서 관리</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-hover: #1a1a25;
+            --border: #2a2a3a;
+            --text-primary: #e8e8f0;
+            --text-secondary: #8888a0;
+            --text-muted: #555566;
+            --accent-cyan: #00d4ff;
+            --accent-purple: #a855f7;
+            --accent-green: #22c55e;
+            --accent-yellow: #eab308;
+            --accent-red: #ef4444;
+            --accent-orange: #f97316;
+            --gradient-1: linear-gradient(135deg, #00d4ff 0%, #a855f7 100%);
+            --gradient-2: linear-gradient(135deg, #22c55e 0%, #00d4ff 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(180deg, rgba(0,212,255,0.1) 0%, transparent 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+        }
+
+        .header-inner {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Main Layout */
+        .main {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+        }
+
+        @media (max-width: 1200px) {
+            .main {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .tab:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .tab.active {
+            background: var(--gradient-1);
+            color: #000;
+            border-color: transparent;
+            font-weight: 600;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Meeting Input */
+        .meeting-input {
+            display: none;
+        }
+
+        .meeting-input.active {
+            display: block;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+        }
+
+        textarea.input-field {
+            min-height: 300px;
+            resize: vertical;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+        }
+
+        .template-btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--bg-hover);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .template-btn:hover {
+            background: var(--accent-cyan);
+            color: #000;
+            border-color: var(--accent-cyan);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 1rem;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 10px;
+            color: #000;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,212,255,0.3);
+        }
+
+        /* Document List */
+        .doc-list {
+            display: none;
+        }
+
+        .doc-list.active {
+            display: block;
+        }
+
+        .doc-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .doc-item:hover {
+            border-color: var(--accent-cyan);
+            background: var(--bg-hover);
+        }
+
+        .doc-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .doc-icon.meeting { background: rgba(168,85,247,0.2); }
+        .doc-icon.decision { background: rgba(34,197,94,0.2); }
+        .doc-icon.task { background: rgba(249,115,22,0.2); }
+        .doc-icon.strategy { background: rgba(0,212,255,0.2); }
+        .doc-icon.feature { background: rgba(234,179,8,0.2); }
+
+        .doc-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .doc-title {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .doc-meta {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .doc-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-meeting { background: var(--accent-purple); color: #fff; }
+        .badge-decision { background: var(--accent-green); color: #fff; }
+        .badge-task { background: var(--accent-orange); color: #fff; }
+        .badge-pending { background: var(--accent-yellow); color: #000; }
+        .badge-done { background: var(--accent-green); color: #fff; }
+
+        /* Graph View */
+        .graph-view {
+            display: none;
+        }
+
+        .graph-view.active {
+            display: block;
+        }
+
+        .graph-container {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.5rem;
+            min-height: 500px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .graph-node {
+            position: absolute;
+            padding: 0.75rem 1rem;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            max-width: 150px;
+            text-align: center;
+        }
+
+        .graph-node:hover {
+            border-color: var(--accent-cyan);
+            transform: scale(1.05);
+            z-index: 10;
+        }
+
+        .graph-node.root {
+            border-color: var(--accent-cyan);
+            background: linear-gradient(135deg, rgba(0,212,255,0.2) 0%, rgba(168,85,247,0.2) 100%);
+        }
+
+        .graph-node.meeting { border-color: var(--accent-purple); }
+        .graph-node.decision { border-color: var(--accent-green); }
+        .graph-node.task { border-color: var(--accent-orange); }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Quick Stats */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .quick-stat {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .quick-stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .quick-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .quick-stat.meetings .quick-stat-value { color: var(--accent-purple); }
+        .quick-stat.decisions .quick-stat-value { color: var(--accent-green); }
+        .quick-stat.tasks .quick-stat-value { color: var(--accent-orange); }
+        .quick-stat.health .quick-stat-value { color: var(--accent-cyan); }
+
+        /* Recent Activity */
+        .activity-item {
+            display: flex;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-top: 6px;
+            flex-shrink: 0;
+        }
+
+        .activity-dot.new { background: var(--accent-green); }
+        .activity-dot.update { background: var(--accent-cyan); }
+        .activity-dot.check { background: var(--accent-yellow); }
+
+        .activity-text {
+            font-size: 0.85rem;
+        }
+
+        .activity-time {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* CLI Panel */
+        .cli-panel {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .cli-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: var(--bg-hover);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .cli-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .cli-dot.red { background: #ff5f56; }
+        .cli-dot.yellow { background: #ffbd2e; }
+        .cli-dot.green { background: #27c93f; }
+
+        .cli-title {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-left: 0.5rem;
+        }
+
+        .cli-content {
+            padding: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            line-height: 1.8;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .cli-line {
+            color: var(--text-muted);
+        }
+
+        .cli-line .cmd { color: var(--accent-cyan); }
+        .cli-line .success { color: var(--accent-green); }
+        .cli-line .info { color: var(--accent-yellow); }
+
+        /* Result Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--bg-hover);
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .result-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-dark);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+        }
+
+        .result-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-icon.success { background: rgba(34,197,94,0.2); color: var(--accent-green); }
+        .result-icon.meeting { background: rgba(168,85,247,0.2); color: var(--accent-purple); }
+        .result-icon.decision { background: rgba(34,197,94,0.2); color: var(--accent-green); }
+        .result-icon.task { background: rgba(249,115,22,0.2); color: var(--accent-orange); }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo">
+                <div class="logo-icon">🔥</div>
+                <span class="logo-text">Holarchy Dashboard</span>
+            </div>
+            <div class="header-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="total-docs">15</div>
+                    <div class="stat-label">총 문서</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="health-score">90%</div>
+                    <div class="stat-label">건강도</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="today-updates">3</div>
+                    <div class="stat-label">오늘 업데이트</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="content">
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" data-tab="input">📝 회의록 입력</button>
+                <button class="tab" data-tab="meetings">📋 Meetings</button>
+                <button class="tab" data-tab="decisions">✅ Decisions</button>
+                <button class="tab" data-tab="tasks">⬜ Tasks</button>
+                <button class="tab" data-tab="graph">🕸️ 그래프</button>
+            </div>
+
+            <!-- Meeting Input -->
+            <div class="meeting-input active" id="tab-input">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🔥 회의록 자동 파싱</h3>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">템플릿 선택</label>
+                        <button class="template-btn" onclick="useTemplate('basic')">기본 회의록</button>
+                        <button class="template-btn" onclick="useTemplate('standup')">스탠드업</button>
+                        <button class="template-btn" onclick="useTemplate('planning')">기획 회의</button>
+                        <button class="template-btn" onclick="useTemplate('review')">리뷰 회의</button>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">회의록 내용</label>
+                        <textarea class="input-field" id="meeting-content" placeholder="# 회의 제목
+
+일시: 2025-11-30
+참석자: 김철수, 이영희
+
+## 안건
+1. MVP 범위 확정
+2. 일정 논의
+
+## 논의 내용
+학생 진단 기능을 먼저 개발하기로 함.
+
+## 결정 사항
+- 결정: MVP는 진단 리포트 기능으로 한정
+- 결정: 2월 말 베타 출시 목표
+
+## 할일
+- TODO: 김철수 - UI 디자인 (12/15까지)
+- TODO: 이영희 - API 설계"></textarea>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="parseMeeting()">
+                        🚀 파싱 & Holon 생성
+                    </button>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">💡 자동 인식 패턴</h3>
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 2;">
+                        <div><code style="color: var(--accent-cyan);">결정:</code> 또는 <code style="color: var(--accent-cyan);">합의:</code> → Decision 자동 생성</div>
+                        <div><code style="color: var(--accent-orange);">TODO:</code> 또는 <code style="color: var(--accent-orange);">할일:</code> → Task 자동 생성</div>
+                        <div><code style="color: var(--accent-purple);">참석자:</code> → 참석자 자동 추출</div>
+                        <div><code style="color: var(--accent-green);">안건:</code> → 안건 목록 자동 추출</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Meetings List -->
+            <div class="doc-list" id="tab-meetings">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">📋 회의 목록</h3>
+                        <span style="color: var(--text-secondary); font-size: 0.85rem;" id="meeting-count">2건</span>
+                    </div>
+                    <div id="meetings-container">
+                        <!-- 동적 생성 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decisions List -->
+            <div class="doc-list" id="tab-decisions">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">✅ 결정 사항</h3>
+                        <span style="color: var(--text-secondary); font-size: 0.85rem;" id="decision-count">3건</span>
+                    </div>
+                    <div id="decisions-container">
+                        <!-- 동적 생성 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tasks List -->
+            <div class="doc-list" id="tab-tasks">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">⬜ 할일 목록</h3>
+                        <span style="color: var(--text-secondary); font-size: 0.85rem;" id="task-count">2건</span>
+                    </div>
+                    <div id="tasks-container">
+                        <!-- 동적 생성 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Graph View -->
+            <div class="graph-view" id="tab-graph">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">🕸️ 문서 관계 그래프</h3>
+                    </div>
+                    <div class="graph-container" id="graph-container">
+                        <!-- 그래프 노드들 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Quick Stats -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">📊 현황</h3>
+                </div>
+                <div class="quick-stats">
+                    <div class="quick-stat meetings">
+                        <div class="quick-stat-value" id="stat-meetings">2</div>
+                        <div class="quick-stat-label">Meetings</div>
+                    </div>
+                    <div class="quick-stat decisions">
+                        <div class="quick-stat-value" id="stat-decisions">3</div>
+                        <div class="quick-stat-label">Decisions</div>
+                    </div>
+                    <div class="quick-stat tasks">
+                        <div class="quick-stat-value" id="stat-tasks">2</div>
+                        <div class="quick-stat-label">Tasks</div>
+                    </div>
+                    <div class="quick-stat health">
+                        <div class="quick-stat-value" id="stat-health">90</div>
+                        <div class="quick-stat-label">Health %</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">⚡ 최근 활동</h3>
+                </div>
+                <div id="activity-container">
+                    <div class="activity-item">
+                        <div class="activity-dot new"></div>
+                        <div>
+                            <div class="activity-text">Meeting 생성: AI 튜터 킥오프</div>
+                            <div class="activity-time">방금 전</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-dot new"></div>
+                        <div>
+                            <div class="activity-text">Task 생성: UI 디자인</div>
+                            <div class="activity-time">방금 전</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-dot check"></div>
+                        <div>
+                            <div class="activity-text">Self-Healing 검증 완료</div>
+                            <div class="activity-time">5분 전</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CLI Panel -->
+            <div class="card" style="padding: 0;">
+                <div class="cli-panel">
+                    <div class="cli-header">
+                        <div class="cli-dot red"></div>
+                        <div class="cli-dot yellow"></div>
+                        <div class="cli-dot green"></div>
+                        <span class="cli-title">Terminal</span>
+                    </div>
+                    <div class="cli-content" id="cli-output">
+                        <div class="cli-line"><span class="cmd">$</span> python _cli.py check</div>
+                        <div class="cli-line"><span class="success">🔥 Self-Healing 완료</span></div>
+                        <div class="cli-line"><span class="info">평균 점수: 90%</span></div>
+                        <div class="cli-line"></div>
+                        <div class="cli-line"><span class="cmd">$</span> _</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">🚀 빠른 실행</h3>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <button class="template-btn" style="width: 100%; text-align: center;" onclick="runCommand('check')">
+                        🔍 검증 (check)
+                    </button>
+                    <button class="template-btn" style="width: 100%; text-align: center;" onclick="runCommand('link')">
+                        🔗 링크 동기화
+                    </button>
+                    <button class="template-btn" style="width: 100%; text-align: center;" onclick="runCommand('report')">
+                        📋 리포트 보기
+                    </button>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Result Modal -->
+    <div class="modal-overlay" id="result-modal">
+        <div class="modal animate-in">
+            <div class="modal-header">
+                <h3 class="modal-title">🔥 생성 완료!</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modal-content">
+                <!-- 동적 생성 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 데이터 (실제로는 서버에서 가져옴)
+        let meetings = [
+            { id: 'meeting-2025-001', title: 'MVP 기능 범위 회의', date: '2025-11-29', participants: ['김철수', '이영희'], status: 'active' },
+            { id: 'meeting-2025-002', title: 'AI 튜터 킥오프 회의', date: '2025-11-30', participants: ['김철수', '이영희'], status: 'active' }
+        ];
+
+        let decisions = [
+            { id: 'decision-2025-001', title: 'MVP는 학생 진단 기능만 포함', meeting: 'meeting-2025-002', status: 'active' },
+            { id: 'decision-2025-003', title: '2월 말 베타 출시', meeting: 'meeting-2025-002', status: 'active' },
+            { id: 'decision-2025-005', title: '일정 논의', meeting: 'meeting-2025-002', status: 'pending' }
+        ];
+
+        let tasks = [
+            { id: 'task-2025-001', title: '김철수 - UI 디자인', meeting: 'meeting-2025-002', status: 'pending', assignee: '김철수' },
+            { id: 'task-2025-003', title: '이영희 - API 설계', meeting: 'meeting-2025-002', status: 'pending', assignee: '이영희' }
+        ];
+
+        // 탭 전환
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                const tabId = tab.dataset.tab;
+                document.querySelectorAll('.meeting-input, .doc-list, .graph-view').forEach(el => {
+                    el.classList.remove('active');
+                });
+                document.getElementById('tab-' + tabId).classList.add('active');
+                
+                if (tabId === 'graph') renderGraph();
+            });
+        });
+
+        // 템플릿 사용
+        const templates = {
+            basic: `# 회의 제목
+
+일시: ${new Date().toISOString().split('T')[0]}
+참석자: 
+
+## 안건
+1. 
+2. 
+
+## 논의 내용
+
+
+## 결정 사항
+- 결정: 
+
+## 할일
+- TODO: `,
+            standup: `# 스탠드업 미팅
+
+일시: ${new Date().toISOString().split('T')[0]}
+참석자: 
+
+## 어제 한 일
+
+
+## 오늘 할 일
+- TODO: 
+
+## 블로커
+`,
+            planning: `# 기획 회의
+
+일시: ${new Date().toISOString().split('T')[0]}
+참석자: 
+
+## 목표
+
+
+## 범위 정의
+- 결정: 
+
+## 일정
+- 결정: 
+
+## 담당자 배정
+- TODO: `,
+            review: `# 리뷰 회의
+
+일시: ${new Date().toISOString().split('T')[0]}
+참석자: 
+
+## 리뷰 대상
+
+
+## 피드백
+
+
+## 결정 사항
+- 결정: 
+
+## 후속 조치
+- TODO: `
+        };
+
+        function useTemplate(name) {
+            document.getElementById('meeting-content').value = templates[name];
+        }
+
+        // 회의록 파싱 (시뮬레이션)
+        function parseMeeting() {
+            const content = document.getElementById('meeting-content').value;
+            if (!content.trim()) {
+                alert('회의록 내용을 입력해주세요.');
+                return;
+            }
+
+            // 파싱 시뮬레이션
+            const title = content.split('\n')[0].replace('#', '').trim() || '회의록';
+            const decisionsFound = (content.match(/결정[:\s]*.+/gi) || []).map(d => d.replace(/결정[:\s]*/i, '').trim());
+            const tasksFound = (content.match(/TODO[:\s]*.+/gi) || []).map(t => t.replace(/TODO[:\s]*/i, '').trim());
+
+            // 결과 모달 표시
+            const meetingId = 'meeting-2025-' + String(meetings.length + 1).padStart(3, '0');
+            
+            let resultHtml = `
+                <div class="result-item">
+                    <div class="result-icon meeting">📋</div>
+                    <div>
+                        <div style="font-weight: 500;">${title}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">${meetingId}</div>
+                    </div>
+                </div>
+            `;
+
+            decisionsFound.forEach((d, i) => {
+                resultHtml += `
+                    <div class="result-item">
+                        <div class="result-icon decision">✅</div>
+                        <div>
+                            <div style="font-weight: 500;">${d.substring(0, 50)}</div>
+                            <div style="font-size: 0.8rem; color: var(--text-secondary);">decision-2025-${String(decisions.length + i + 1).padStart(3, '0')}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            tasksFound.forEach((t, i) => {
+                resultHtml += `
+                    <div class="result-item">
+                        <div class="result-icon task">⬜</div>
+                        <div>
+                            <div style="font-weight: 500;">${t.substring(0, 50)}</div>
+                            <div style="font-size: 0.8rem; color: var(--text-secondary);">task-2025-${String(tasks.length + i + 1).padStart(3, '0')}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            resultHtml += `
+                <div style="margin-top: 1.5rem; padding: 1rem; background: var(--bg-dark); border-radius: 8px; font-size: 0.85rem;">
+                    <div style="color: var(--accent-cyan); margin-bottom: 0.5rem;">💡 CLI 명령어:</div>
+                    <code style="color: var(--text-secondary);">python _cli.py meeting -t "회의록 내용"</code>
+                </div>
+            `;
+
+            document.getElementById('modal-content').innerHTML = resultHtml;
+            document.getElementById('result-modal').classList.add('active');
+
+            // 데이터 추가 (시뮬레이션)
+            meetings.push({ id: meetingId, title: title, date: new Date().toISOString().split('T')[0], status: 'active' });
+            decisionsFound.forEach((d, i) => {
+                decisions.push({ id: `decision-2025-${String(decisions.length + 1).padStart(3, '0')}`, title: d, meeting: meetingId, status: 'active' });
+            });
+            tasksFound.forEach((t, i) => {
+                tasks.push({ id: `task-2025-${String(tasks.length + 1).padStart(3, '0')}`, title: t, meeting: meetingId, status: 'pending' });
+            });
+
+            updateStats();
+            renderLists();
+            addActivity(`Meeting 생성: ${title}`);
+        }
+
+        function closeModal() {
+            document.getElementById('result-modal').classList.remove('active');
+        }
+
+        // 통계 업데이트
+        function updateStats() {
+            document.getElementById('stat-meetings').textContent = meetings.length;
+            document.getElementById('stat-decisions').textContent = decisions.length;
+            document.getElementById('stat-tasks').textContent = tasks.length;
+            document.getElementById('meeting-count').textContent = meetings.length + '건';
+            document.getElementById('decision-count').textContent = decisions.length + '건';
+            document.getElementById('task-count').textContent = tasks.length + '건';
+            document.getElementById('total-docs').textContent = 10 + meetings.length + decisions.length + tasks.length;
+        }
+
+        // 리스트 렌더링
+        function renderLists() {
+            // Meetings
+            document.getElementById('meetings-container').innerHTML = meetings.map(m => `
+                <div class="doc-item">
+                    <div class="doc-icon meeting">📋</div>
+                    <div class="doc-content">
+                        <div class="doc-title">${m.title}</div>
+                        <div class="doc-meta">
+                            <span>${m.date}</span>
+                            <span>${m.id}</span>
+                        </div>
+                    </div>
+                    <span class="doc-badge badge-meeting">${m.status}</span>
+                </div>
+            `).join('');
+
+            // Decisions
+            document.getElementById('decisions-container').innerHTML = decisions.map(d => `
+                <div class="doc-item">
+                    <div class="doc-icon decision">✅</div>
+                    <div class="doc-content">
+                        <div class="doc-title">${d.title}</div>
+                        <div class="doc-meta">
+                            <span>from: ${d.meeting}</span>
+                        </div>
+                    </div>
+                    <span class="doc-badge badge-decision">${d.status}</span>
+                </div>
+            `).join('');
+
+            // Tasks
+            document.getElementById('tasks-container').innerHTML = tasks.map(t => `
+                <div class="doc-item">
+                    <div class="doc-icon task">⬜</div>
+                    <div class="doc-content">
+                        <div class="doc-title">${t.title}</div>
+                        <div class="doc-meta">
+                            <span>from: ${t.meeting}</span>
+                        </div>
+                    </div>
+                    <span class="doc-badge ${t.status === 'done' ? 'badge-done' : 'badge-pending'}">${t.status}</span>
+                </div>
+            `).join('');
+        }
+
+        // 그래프 렌더링
+        function renderGraph() {
+            const container = document.getElementById('graph-container');
+            const width = container.offsetWidth;
+            const height = 500;
+
+            let html = '';
+            
+            // Root
+            html += `<div class="graph-node root" style="left: ${width/2 - 75}px; top: 20px;">📌 hte-doc-000<br><small>Holarchy Root</small></div>`;
+            
+            // Strategy
+            html += `<div class="graph-node" style="left: ${width/2 - 75}px; top: 100px;">📋 strategy-2025-001<br><small>AI PM 시스템</small></div>`;
+            
+            // Meetings
+            meetings.forEach((m, i) => {
+                const x = 50 + (i * 180);
+                html += `<div class="graph-node meeting" style="left: ${x}px; top: 200px;">📋 ${m.id}<br><small>${m.title.substring(0, 15)}...</small></div>`;
+            });
+
+            // Decisions
+            decisions.forEach((d, i) => {
+                const x = 30 + (i * 150);
+                html += `<div class="graph-node decision" style="left: ${x}px; top: 320px;">✅ ${d.id}<br><small>${d.title.substring(0, 12)}...</small></div>`;
+            });
+
+            // Tasks
+            tasks.forEach((t, i) => {
+                const x = 80 + (i * 200);
+                html += `<div class="graph-node task" style="left: ${x}px; top: 420px;">⬜ ${t.id}<br><small>${t.title.substring(0, 12)}...</small></div>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // 활동 추가
+        function addActivity(text) {
+            const container = document.getElementById('activity-container');
+            const item = document.createElement('div');
+            item.className = 'activity-item animate-in';
+            item.innerHTML = `
+                <div class="activity-dot new"></div>
+                <div>
+                    <div class="activity-text">${text}</div>
+                    <div class="activity-time">방금 전</div>
+                </div>
+            `;
+            container.insertBefore(item, container.firstChild);
+        }
+
+        // CLI 명령 실행 (시뮬레이션)
+        function runCommand(cmd) {
+            const output = document.getElementById('cli-output');
+            let result = '';
+            
+            if (cmd === 'check') {
+                result = `<div class="cli-line"><span class="cmd">$</span> python _cli.py check</div>
+                    <div class="cli-line"><span class="success">🔥 Self-Healing 완료</span></div>
+                    <div class="cli-line"><span class="info">평균 점수: 90%</span></div>`;
+            } else if (cmd === 'link') {
+                result = `<div class="cli-line"><span class="cmd">$</span> python _cli.py link</div>
+                    <div class="cli-line"><span class="success">✅ 양방향 링크 동기화 완료</span></div>`;
+            } else if (cmd === 'report') {
+                result = `<div class="cli-line"><span class="cmd">$</span> python _cli.py report</div>
+                    <div class="cli-line"><span class="info">📊 총 이슈: 12개</span></div>
+                    <div class="cli-line"><span class="info">ℹ️ error: 0, warning: 0, info: 12</span></div>`;
+            }
+            
+            output.innerHTML = result + `<div class="cli-line"></div><div class="cli-line"><span class="cmd">$</span> _</div>`;
+        }
+
+        // 초기화
+        updateStats();
+        renderLists();
+
+        // 모달 외부 클릭 시 닫기
+        document.getElementById('result-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'result-modal') closeModal();
+        });
+    </script>
+</body>
+</html>
+
