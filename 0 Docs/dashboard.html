@@ -984,20 +984,149 @@
             document.getElementById('meeting-content').value = templates[name];
         }
 
-        // 회의록 파싱 (시뮬레이션)
-        function parseMeeting() {
+        // API 기본 URL (서버 실행 시)
+        const API_BASE = 'http://localhost:5000';
+        let useServer = false;
+
+        // 서버 연결 확인
+        async function checkServer() {
+            try {
+                const res = await fetch(API_BASE + '/api/stats', { method: 'GET' });
+                if (res.ok) {
+                    useServer = true;
+                    console.log('🔥 서버 연결됨 - 실제 파일 생성 모드');
+                    document.querySelector('.btn-primary').textContent = '🚀 파싱 & 실제 파일 생성';
+                    loadDocuments();
+                }
+            } catch (e) {
+                console.log('ℹ️ 서버 없음 - 시뮬레이션 모드');
+            }
+        }
+        checkServer();
+
+        // 문서 로드 (서버에서)
+        async function loadDocuments() {
+            if (!useServer) return;
+            try {
+                const res = await fetch(API_BASE + '/api/documents');
+                const data = await res.json();
+                if (data.success) {
+                    meetings = data.documents.meetings.map(m => ({
+                        id: m.id, title: m.title, date: m.date, status: m.status
+                    }));
+                    decisions = data.documents.decisions.map(d => ({
+                        id: d.id, title: d.title, status: d.status, meeting: d.parent
+                    }));
+                    tasks = data.documents.tasks.map(t => ({
+                        id: t.id, title: t.title, status: t.status, meeting: t.parent
+                    }));
+                    updateStats();
+                    renderLists();
+                }
+            } catch (e) {
+                console.error('문서 로드 실패:', e);
+            }
+        }
+
+        // 회의록 파싱 (서버 API 또는 시뮬레이션)
+        async function parseMeeting() {
             const content = document.getElementById('meeting-content').value;
             if (!content.trim()) {
                 alert('회의록 내용을 입력해주세요.');
                 return;
             }
 
-            // 파싱 시뮬레이션
+            // 서버 모드: 실제 API 호출
+            if (useServer) {
+                try {
+                    document.querySelector('.btn-primary').textContent = '⏳ 생성 중...';
+                    document.querySelector('.btn-primary').disabled = true;
+
+                    const res = await fetch(API_BASE + '/api/meeting', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ text: content, auto_spawn: true })
+                    });
+                    const data = await res.json();
+
+                    document.querySelector('.btn-primary').textContent = '🚀 파싱 & 실제 파일 생성';
+                    document.querySelector('.btn-primary').disabled = false;
+
+                    if (data.success) {
+                        // 결과 모달 표시
+                        let resultHtml = `
+                            <div class="result-item">
+                                <div class="result-icon success">✅</div>
+                                <div>
+                                    <div style="font-weight: 500; color: var(--accent-green);">실제 파일 생성 완료!</div>
+                                </div>
+                            </div>
+                            <div class="result-item">
+                                <div class="result-icon meeting">📋</div>
+                                <div>
+                                    <div style="font-weight: 500;">${data.meeting_id}</div>
+                                    <div style="font-size: 0.8rem; color: var(--text-secondary);">신뢰도: ${Math.round(data.confidence * 100)}% → ${data.parent}</div>
+                                </div>
+                            </div>
+                        `;
+
+                        data.decisions.forEach(d => {
+                            resultHtml += `
+                                <div class="result-item">
+                                    <div class="result-icon decision">✅</div>
+                                    <div>
+                                        <div style="font-weight: 500;">${d.substring(0, 50)}</div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+
+                        data.tasks.forEach(t => {
+                            resultHtml += `
+                                <div class="result-item">
+                                    <div class="result-icon task">⬜</div>
+                                    <div>
+                                        <div style="font-weight: 500;">${t.substring(0, 50)}</div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+
+                        resultHtml += `
+                            <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(34,197,94,0.1); border-radius: 8px; font-size: 0.85rem; border: 1px solid var(--accent-green);">
+                                <div style="color: var(--accent-green);">📁 파일이 실제로 생성되었습니다:</div>
+                                <div style="color: var(--text-secondary); margin-top: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;">
+                                    ${data.file.replace(/\\/g, '/')}<br>
+                                    + ${data.spawned.length}개 하위 문서
+                                </div>
+                            </div>
+                        `;
+
+                        document.getElementById('modal-content').innerHTML = resultHtml;
+                        document.getElementById('result-modal').classList.add('active');
+
+                        // 데이터 새로고침
+                        loadDocuments();
+                        addActivity(`📁 실제 파일 생성: ${data.meeting_id}`);
+                        
+                        // 입력창 초기화
+                        document.getElementById('meeting-content').value = '';
+                    } else {
+                        alert('오류: ' + data.error);
+                    }
+                } catch (e) {
+                    document.querySelector('.btn-primary').textContent = '🚀 파싱 & 실제 파일 생성';
+                    document.querySelector('.btn-primary').disabled = false;
+                    alert('서버 오류: ' + e.message);
+                }
+                return;
+            }
+
+            // 시뮬레이션 모드 (서버 없을 때)
             const title = content.split('\n')[0].replace('#', '').trim() || '회의록';
             const decisionsFound = (content.match(/결정[:\s]*.+/gi) || []).map(d => d.replace(/결정[:\s]*/i, '').trim());
             const tasksFound = (content.match(/TODO[:\s]*.+/gi) || []).map(t => t.replace(/TODO[:\s]*/i, '').trim());
 
-            // 결과 모달 표시
             const meetingId = 'meeting-2025-' + String(meetings.length + 1).padStart(3, '0');
             
             let resultHtml = `
@@ -1036,15 +1165,14 @@
 
             resultHtml += `
                 <div style="margin-top: 1.5rem; padding: 1rem; background: var(--bg-dark); border-radius: 8px; font-size: 0.85rem;">
-                    <div style="color: var(--accent-cyan); margin-bottom: 0.5rem;">💡 CLI 명령어:</div>
-                    <code style="color: var(--text-secondary);">python _cli.py meeting -t "회의록 내용"</code>
+                    <div style="color: var(--accent-yellow); margin-bottom: 0.5rem;">⚠️ 시뮬레이션 모드 (서버 필요)</div>
+                    <code style="color: var(--text-secondary);">python server.py</code> 실행 후 새로고침
                 </div>
             `;
 
             document.getElementById('modal-content').innerHTML = resultHtml;
             document.getElementById('result-modal').classList.add('active');
 
-            // 데이터 추가 (시뮬레이션)
             meetings.push({ id: meetingId, title: title, date: new Date().toISOString().split('T')[0], status: 'active' });
             decisionsFound.forEach((d, i) => {
                 decisions.push({ id: `decision-2025-${String(decisions.length + 1).padStart(3, '0')}`, title: d, meeting: meetingId, status: 'active' });
