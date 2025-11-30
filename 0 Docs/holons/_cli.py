@@ -175,6 +175,30 @@ def cmd_chunk(args):
             print("💡 'python _cli.py chunk generate' 먼저 실행하세요")
 
 
+def cmd_meta(args):
+    """Meta-Research Engine"""
+    from _meta_research_engine import MetaResearchEngine
+    
+    script_dir = Path(__file__).parent
+    engine = MetaResearchEngine(str(script_dir.parent))
+    
+    if args.action == "report":
+        result = engine.run_analysis()
+        report = engine.generate_report(result)
+        report_file = engine.save_report(report)
+        
+        engine.print_summary(result)
+        print(f"📄 리포트 생성: {report_file}")
+        print()
+        print("🔔 리포트를 검토하고 제안을 승인/거부해주세요.")
+    else:  # analyze
+        result = engine.run_analysis()
+        engine.print_summary(result)
+        
+        matrix_file = engine.save_matrix()
+        print(f"📁 유사도 매트릭스: {matrix_file}")
+
+
 def cmd_help(args):
     """도움말"""
     print("""
@@ -212,6 +236,16 @@ def cmd_help(args):
 ║                                                              ║
 ║  * Chunk는 W(의지)와의 공명도로 중요도 판단                  ║
 ║  * 항상 Top-7만 유지 (인간 작업기억 모방)                    ║
+║                                                              ║
+║  🔬 Meta-Research Engine                                     ║
+║  ──────────────────────────────────────────────────────────  ║
+║  meta analyze      프로젝트 간 관계 분석                     ║
+║  meta report       정제 제안 리포트 생성                     ║
+║                                                              ║
+║  * 중복/충돌 탐지                                            ║
+║  * Drift 분석 (상위 헌법 alignment)                          ║
+║  * 연구 프로세스 품질 검사                                   ║
+║  * 정제 제안 (merge/split/redirect)                          ║
 ║                                                              ║
 ╚══════════════════════════════════════════════════════════════╝
     """)
@@ -251,6 +285,12 @@ def main():
     parser_chunk.add_argument("action", choices=["generate", "show"], nargs="?", default="show",
                              help="generate: 새로 생성, show: 현재 표시")
     parser_chunk.set_defaults(func=cmd_chunk)
+    
+    # meta
+    parser_meta = subparsers.add_parser("meta", help="Meta-Research Engine")
+    parser_meta.add_argument("action", choices=["analyze", "report"], nargs="?", default="analyze",
+                            help="analyze: 분석, report: 리포트 생성")
+    parser_meta.set_defaults(func=cmd_meta)
     
     # status
     parser_status = subparsers.add_parser("status", help="시스템 상태")

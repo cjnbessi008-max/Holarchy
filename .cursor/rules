@@ -830,6 +830,109 @@ chunk_engine:
       Chunk는 "지금 관찰해야 할 것"을 자동 선별
 
 #═══════════════════════════════════════════════════════════════════════════════
+# 🔬 【Meta-Research Engine】 연구 프로세스를 연구하는 메타 연구 시스템
+#═══════════════════════════════════════════════════════════════════════════════
+
+meta_research_engine:
+
+  description: |
+    AI가 직접 연구하고, 그 연구 과정을 다시 AI가 검토·정제하고,
+    최종 결과를 사람에게 리포트하는 2계층 연구구조.
+    
+    Layer 1: Research Engine (프로젝트 생성/수정/가설/분석)
+    Layer 2: Meta-Research Engine (프로젝트 간 관계 분석, 품질 평가, 정제)
+
+  five_stage_pipeline:
+    1_signal_detection: |
+      하위 문서, 프로젝트, 회의, 로그에서 수집되는 신호들:
+      - drift(변화), 충돌(conflict), 중복(redundancy)
+      - 예외 패턴(exception), 신규 요구사항(new need)
+      - 현장에서 생긴 문제(practical issue), 새로운 기회(opportunity)
+      
+      → 하위 정보는 '문제'가 아니라 '신호'로 본다
+    
+    2_semantic_analysis: |
+      AI가 하위 신호를 자동 분석해서 6가지로 분류:
+      pattern / exception / drift / risk / insight / opportunity
+      
+      수행하는 분석:
+      - 목적과 의도 alignment
+      - 상황 맥락 추론
+      - 근거 유효성 평가
+      - 기존 프로젝트와 관계 분석
+    
+    3_project_evolution: |
+      하위 신호가 상위 구조에 들어맞지 않으면:
+      → 기존 프로젝트 수정 또는 새로운 프로젝트 생성
+      
+      효과:
+      - 기존 구조는 오염되지 않음
+      - 상·하 레이어 간 충돌 최소화
+      - drift/중복/예외 데이터를 지식 확장 요소로 변환
+    
+    4_meta_validation: |
+      생성되거나 수정된 프로젝트를 메타 엔진이 검토:
+      - 중복성 체크 (similarity_matrix)
+      - 충돌 포인트 분석
+      - 기존 구조와 alignment
+      - 링크 구조 재배열
+      - 프로젝트 병합/분리 추천
+      - drift 원인 분석
+      - 연구 프로세스 품질 평가
+    
+    5_human_approval: |
+      최종 단계는 항상 사람의 승인.
+      AI가 제공하는 것:
+      - 정제된 프로젝트
+      - 분석 리포트
+      - 병합/삭제/확장 제안
+      - 링크 구조 조정안
+      
+      사람이 승인하면 최종적으로 구조가 업데이트됨.
+
+  analysis_modules:
+    similarity_analyzer: |
+      프로젝트 간 유사도 분석
+      - Will/Intention/Goal/Link 유사도 계산
+      - Jaccard 유사도 기반
+      - 중복 임계값: 60%
+    
+    drift_analyzer: |
+      상위 헌법과의 alignment 분석
+      - Root W 키워드와의 공명도
+      - 높은 drift = 상위 의지에서 벗어남
+      - Drift 임계값: 30%
+    
+    quality_inspector: |
+      연구 프로세스 품질 검사
+      - 문제 정의 적절성
+      - 근거 구조 충족성
+      - 가설 생성 흐름 (W→X→P)
+      - 인과관계 왜곡 여부
+    
+    refinement_engine: |
+      정제/통합 제안 생성
+      - merge(A, B): 중복 문서 병합
+      - derive_new(A, B): 새 프로젝트 파생
+      - archive(B): 불필요 문서 보관
+      - split(A → A1, A2): 문서 분리
+      - redirect(B → A): 참조 재지정
+
+  cli_commands:
+    analyze: "python _cli.py meta analyze"
+    report: "python _cli.py meta report"
+  
+  output_files:
+    matrix: "0 Docs/holons/_similarity_matrix.json"
+    report: "0 Docs/reports/meta_research_report_YYYY-MM-DD.md"
+
+  philosophy: |
+    "하위 정보는 버려지지 않는다 → 모두 신호로 처리됨"
+    "상위는 경직되지 않는다 → 하위 신호는 새로운 프로젝트로 분기됨"
+    "AI가 스스로 연구하고 정제한다 → 사람의 피로도 없이 확장"
+    "최종 판단은 사람이 한다 → 책임성·안정성 확보"
+
+#═══════════════════════════════════════════════════════════════════════════════
 # 【견고성 규칙】 시스템 무결성 보장
 #═══════════════════════════════════════════════════════════════════════════════
 
