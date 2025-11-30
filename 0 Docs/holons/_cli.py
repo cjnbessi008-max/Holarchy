@@ -267,6 +267,58 @@ def cmd_status(args):
     print("=" * 60)
 
 
+def cmd_meeting(args):
+    """회의록 자동 파싱 & Holon 생성"""
+    from _meeting_parser import MeetingParser
+    
+    script_dir = Path(__file__).parent
+    parser = MeetingParser(str(script_dir))
+    
+    if args.file:
+        # 파일에서 읽기
+        file_path = Path(args.file)
+        if not file_path.exists():
+            print(f"❌ 파일을 찾을 수 없습니다: {args.file}")
+            return
+        text = file_path.read_text(encoding="utf-8")
+    elif args.text:
+        # 직접 텍스트 입력
+        text = args.text
+    else:
+        # 대화형 입력
+        print("=" * 60)
+        print("📝 회의록을 입력하세요 (빈 줄 2번으로 종료):")
+        print("=" * 60)
+        lines = []
+        empty_count = 0
+        while True:
+            try:
+                line = input()
+                if line == "":
+                    empty_count += 1
+                    if empty_count >= 2:
+                        break
+                else:
+                    empty_count = 0
+                lines.append(line)
+            except EOFError:
+                break
+        text = "\n".join(lines)
+    
+    if not text.strip():
+        print("❌ 회의록 내용이 비어있습니다")
+        return
+    
+    # 파싱 및 생성
+    result = parser.parse_and_create(text, auto_spawn=not args.no_spawn)
+    
+    print()
+    print("💡 다음 단계:")
+    print(f"   1. 생성된 파일 확인: 0 Docs/meetings/{result['meeting_id']}*.md")
+    print("   2. python _cli.py link  # 링크 동기화")
+    print("   3. python _cli.py check  # 검증")
+
+
 def cmd_chunk(args):
     """W 기반 Active Chunk 관리"""
     from _chunk_engine import ChunkManager
@@ -369,9 +421,12 @@ def cmd_help(args):
 ║    type: strategy, structure, feature, meeting,              ║
 ║          decision, task                                      ║
 ║                                                              ║
-║  🚀 회의 자동화                                              ║
+║  🚀 회의 자동화 (NEW)                                        ║
 ║  ──────────────────────────────────────────────────────────  ║
-║  spawn <meeting_id>  회의에서 Decision/Task 자동 생성        ║
+║  meeting             회의록 자동 파싱 & Holon 생성           ║
+║  meeting -f 파일     파일에서 회의록 읽기                    ║
+║  meeting -t "내용"   텍스트 직접 입력                        ║
+║  spawn <meeting_id>  회의에서 Decision/Task 생성             ║
 ║                                                              ║
 ║  🧠 Working Memory                                           ║
 ║  ──────────────────────────────────────────────────────────  ║
@@ -437,6 +492,13 @@ def main():
     parser_spawn = subparsers.add_parser("spawn", help="Meeting에서 Decision/Task 생성")
     parser_spawn.add_argument("meeting_id", help="Meeting holon_id")
     parser_spawn.set_defaults(func=cmd_spawn)
+    
+    # meeting (NEW - 회의록 자동 파싱)
+    parser_meeting = subparsers.add_parser("meeting", help="회의록 자동 파싱 & Holon 생성")
+    parser_meeting.add_argument("--file", "-f", help="회의록 파일 경로 (.txt, .md)")
+    parser_meeting.add_argument("--text", "-t", help="회의록 텍스트 직접 입력")
+    parser_meeting.add_argument("--no-spawn", action="store_true", help="Decision/Task 자동 생성 안함")
+    parser_meeting.set_defaults(func=cmd_meeting)
     
     # chunk
     parser_chunk = subparsers.add_parser("chunk", help="W 기반 Active Chunk 관리")

@@ -1,0 +1,26 @@
+```json
+{
+  "holon_id": "decision-2025-001",
+  "slug": "2월-말-베타-출시",
+  "type": "decision",
+  "meta": {
+    "title": "2월 말 베타 출시",
+    "created_at": "2025-11-30",
+    "status": "active"
+  },
+  "W": {
+    "will": {
+      "drive": "'2월 말 베타 출시'을 실행에 옮긴다"
+    }
+  },
+  "links": {
+    "parent": "meeting-2025-002",
+    "children": [],
+    "related": []
+  }
+}
+```
+
+# ✅ 2월 말 베타 출시
+
+*meeting-2025-002에서 자동 생성됨*
