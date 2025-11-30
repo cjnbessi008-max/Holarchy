@@ -1,69 +1,831 @@
-#-------------------------------------------------------------
-# HTE Holarchy Auto Placement Rule for Cursor AI
-# 문서 제목/내용을 기반으로 폴더 및 파일명을 자동 생성하는 규칙
-#-------------------------------------------------------------
+#═══════════════════════════════════════════════════════════════════════════════
+# 📜 HOLON PM SYSTEM v2.0
+# AI PM 기반 회의 자동화 및 프로젝트 오케스트레이션 시스템
+#═══════════════════════════════════════════════════════════════════════════════
 
-rules:
-  - when: creating_file
-    run: |
-      You are the Holarchy File Placement Engine for the HTE company.
-      목적: 새 문서 정보가 들어오면 HTE Holarchy 구조에 자동 분류하고
-           올바른 파일명 규칙으로 파일을 생성하며 템플릿을 설정한다.
+# 이 시스템의 목적:
+# ✔ AI PM이 회의를 자동화하고 결정을 추적
+# ✔ 모든 문서가 Single Source of Truth (이중 관리 없음)
+# ✔ 기능 제안 레벨까지만 설계 (세부 개발은 하위 팀)
+# ✔ 견고한 구조로 전국 규모 수학 학원 자동화 지원
 
-      ------------------------------------------------------------
-      1) 문서의 의미 분석
-      ------------------------------------------------------------
+#═══════════════════════════════════════════════════════════════════════════════
+# 🌀 【무지성의 꿈】 핵심 철학
+#═══════════════════════════════════════════════════════════════════════════════
 
-      아래 기준으로 문서를 Holarchy 모듈(M00~M21) 중 하나로 분류하라:
+mindlessness_philosophy:
 
-      - 전략/세계관                → M00_Astral
-      - 시간·경영·의사결정         → M01_TimeCrystal
-      - 조직 운영 리듬·프로세스    → M02_TimelineGenesis
-      - 비즈니스모델              → M03_BusinessModel
-      - KPI/OKR                  → M04_KPI_OKR
-      - 재무 성장경로             → M05_FinancialGrowth
-      - SWOT 분석                → M06_SWOT
-      - 사업 비중/위율 전략       → M07_BizWeighing
-      - 내부 브랜딩               → M08_InternalBranding
-      - 버티컬 브랜딩             → M09_VerticalBranding
-      - AI Agent / Holon 구조     → M10_AgentGarden
-      - 서비스 파이프라인         → M11_ServicePipeline
-      - 외부 브랜딩               → M12_ExternalBranding
-      - 성장 엔진                 → M13_TrackGrowthEngine
-      - 온보딩/교육               → M14_CompanyOnboarding
-      - 리더십/CEO 원리           → M15_TimeCrystalCEO
-      - AI Mind Architecture      → M16_AIMindArchitecture
-      - 신경계/데이터 파이프라인  → M17_NervousSystem
-      - 정보 스택/지능 블럭        → M18_InformationBlocks
-      - 기업문화                  → M19_CompanyCulture
-      - 소프트웨어 백본           → M21_SoftwareBackbone
+  essence: |
+    "지식은 노력으로 얻는 게 아니라, 무지성의 관찰이 오래되었을 때 스며든다."
+    
+    정보체 ──→ 지식체 ──→ 실행체 ──→ (순환)
+    
+    • 생각하지 않고 관찰한다
+    • 이해하지 않고 흐르게 한다
+    • 완벽하게 하기 전에 반복한다
 
-      ------------------------------------------------------------
-      2) 파일명 생성 규칙
-      ------------------------------------------------------------
-      파일명 형식:
-        HTE_<M코드>_P01_T01_V00_A00.md
+  core_principles:
+    - "완벽하게 하기 전에, 반복부터 해"
+    - "전달되지 않은 철학은 그냥 혼잣말이다"
+    - "이기려 하지 마라. 리듬이 빠르면, 이미 이겼다"
+    - "도구를 다루지 말고, 도구가 자랄 공간을 열어줘라"
+    - "완벽한 시스템은 아무도 중심이 아니고 모두가 중심인 상태다"
+
+  mission_agents:
+    M00_Astral: "심연의 뿌리, 존재의 원천"
+    M01_TimeCrystal: "미래에서 온 기억, 철학의 씨앗"
+    M02_TimelineGenesis: "철학을 현실에 심는 장치"
+    M03_BusinessModel: "의미를 거래 가능하게 만드는 변환"
+    M04_KPI_OKR: "숫자가 기도문이 되는 곳"
+    M05_FinancialGrowth: "순환의 속도, 에너지의 흐름"
+    M06_SWOT: "의식의 방향성, 패턴의 분류"
+    M07_BizWeighing: "멈추지 않는 전쟁, 리듬의 승리"
+    M08_InternalBranding: "자기도 모르게 흘리는 패턴"
+    M09_VerticalDrilling: "핵심 전략/모델/기술개발 기획의 수직 굴착"
+    M10_AgentGarden: "분산된 무지성 실행의 축제"
+    M11_ServicePipeline: "전달의 마법, 관통의 기술"
+    M12_ExternalBranding: "존재의 잔향을 퍼뜨리는 구조"
+    M13_TrackGrowthEngine: "부르는 힘, 흐르게 하는 루프"
+    M14_CompanyOnboarding: "리듬이 빠르면 이미 이긴 상태"
+    M15_TimeCrystalCEO: "흐름이 되는 리더십"
+    M16_AIMindArchitecture: "도구가 자랄 공간을 여는 것"
+    M17_NervousSystem: "연결의 신전, 패턴의 네트워크"
+    M18_InformationBlocks: "무의식 정보 축적의 심연"
+    M19_CompanyCulture: "무의식적 지식축적 시스템"
+    M20_KnowledgeCrystal: "루프의 진동으로 응결된 결정"
+    M21_SoftwareBackbone: "모두가 중심인 무형의 뼈대"
+
+  application_rules:
+    - "각 미션 폴더의 _MISSION.md를 참조하여 해당 미션의 본질에 맞게 행동"
+    - "문서 생성 시 해당 미션의 무지성 원리를 W에 반영"
+    - "반복과 흐름을 우선, 완벽함은 나중"
+    - "연결만 만들고 통제하지 않는다"
+
+#═══════════════════════════════════════════════════════════════════════════════
+# 🌌 【존재론적 재정의】 DIL Engine - 23단계 완전체계
+#═══════════════════════════════════════════════════════════════════════════════
+
+ontological_backbone:
+
+  description: |
+    팔란티어식 존재론적 재정의를 통해 문맥을 파악하고 지식을 업데이트한다.
+    전체 지식의 척추(Backbone) 역할을 하며,
+    길을 잃거나 방향이 모호할 때 반드시 이 기준으로 재정렬한다.
+
+  north_star: |
+    "Bloom's Two Sigma 문제 해결 - 1:1 과외 효과를 기술로 재현·확장"
+    모든 결정의 북극성이다.
+
+  layers:
+    cosmological: # 우주론적 바닥 (-12 ~ -5)
+      range: "-12 to -5"
+      theme: "가능성에서 기원까지"
+      stages:
+        "-12": "Field of Possibility - 가능성의 장"
+        "-11": "Condition of Duality - 이원성의 등장"
+        "-10": "Energetic Tension - 장력"
+        "-9": "Primordial Impulse - 원초적 충동"
+        "-8": "Pre-Awareness - 분화 전 가능성"
+        "-7": "Awareness - 감지의 발생"
+        "-6": "Meaning - 의미의 발생"
+        "-5": "Origin - 기원의 형성 (Bloom's 2σ)"
+
+    ontological: # 존재론적 바닥 (-4 ~ -1)
+      range: "-4 to -1"
+      theme: "의도에서 맥락까지"
+      stages:
+        "-4": "Intention - 맞춤 지도 경험의 의도"
+        "-3": "Identity - 데이터 기반 학습 성장 엔진 팀"
+        "-2": "Purpose - 인지 성장, 신뢰, 글로벌 EdTech"
+        "-1": "Context - AI·LLM 급성장의 완벽한 타이밍"
+
+    decision: # 의사결정·분석 (0 ~ 3)
+      range: "0 to 3"
+      theme: "문제에서 데이터까지"
+      stages:
+        "0": "Problem - 실시간 파악·개입은 인간만으로 불가능"
+        "1": "Decision - AI·시스템·로봇·시선추적 통합 솔루션"
+        "2": "Impact - 교육만족도·학습속도·정서안정 구조적 상승"
+        "3": "Data - 시선→읽기순서→정서→난이도→오류→속도→반복률"
+
+    execution: # 실행·운영 (4 ~ 10)
+      range: "4 to 10"
+      theme: "실행에서 강화까지"
+      stages:
+        "4": "Action - 웹캠·시선추적·아바타GPT·로봇·TTS 통합"
+        "5": "Measurement - 읽기시간·정서변화·불안빈도·속도변화"
+        "6": "Insight - 개입타이밍 정확도 → 비선형 성장"
+        "7": "Feedback Loop - 실시간 반영, 성장 스냅샷"
+        "8": "Adjustment - 난이도·개입톤·추천·설명방식 자동조정"
+        "9": "Learning - 전체 로그 기반 지속 업그레이드"
+        "10": "Reinforcement - 투자·해외확장·메타버스 트리거"
+
+  realignment_guide:
+    when_lost: |
+      1. 현재 작업이 어느 레이어에 속하는가?
+      2. 해당 레이어의 핵심 질문으로 돌아가라
+      3. 상위 레이어의 맥락과 일치하는지 확인
+      4. 무지성 원리 적용: "완벽하게 하기 전에, 반복부터 해"
+    
+    when_unclear: |
+      항상 -5 Origin으로 돌아가라:
+      "Bloom's Two Sigma 문제 해결 - 1:1 과외 효과를 기술로 재현·확장"
+
+  integration_with_mindlessness:
+    cosmological: "정보체 - 가능성을 관찰하고 흡수"
+    ontological: "지식체 - 패턴을 사랑하고 정체성 형성"
+    decision: "지식결정 생성기 - 루프의 진동으로 결정 응결"
+    execution: "실행체 - 반복, 측정, 강화"
+
+  reference_document: "2 Company/4 HTE/_ONTOLOGY.md"
+
+#═══════════════════════════════════════════════════════════════════════════════
+# 【핵심 원칙】 Single Source - 문서가 유일한 진실
+#═══════════════════════════════════════════════════════════════════════════════
+
+core_principle:
+  name: "Document-Centric Truth"
+  description: |
+    ✔ 각 문서 자체가 유일한 진실 (별도 graph.json 없음)
+    ✔ 참조는 문서 내 links 섹션에서만 관리
+    ✔ AI PM이 한 번의 파일 수정으로 모든 것 완결
+    ✔ 역참조는 AI PM이 자동 업데이트
+
+#═══════════════════════════════════════════════════════════════════════════════
+# 【Holon 타입 정의】 PM 워크플로우 전용
+#═══════════════════════════════════════════════════════════════════════════════
+
+holon_types:
+
+  # 전략/설계 문서
+  strategy:
+    description: "전략, 비전, 장기 계획"
+    example: "전국 수학학원 시장 독점 전략"
+    wxsperta_focus: ["W", "X", "A"]
+  
+  structure:
+    description: "시스템 구조, 아키텍처"
+    example: "AI 튜터 시스템 아키텍처"
+    wxsperta_focus: ["S", "P", "T"]
+  
+  feature:
+    description: "기능 제안 (세부 구현 아님)"
+    example: "학습 진단 리포트 기능"
+    wxsperta_focus: ["W", "S", "P", "E"]
+  
+  # PM 워크플로우 전용
+  meeting:
+    description: "회의 기록 및 결정 사항"
+    required_fields: ["agenda", "attendees", "decisions", "next_actions"]
+    example: "2025-11-29 MVP 기능 범위 회의"
+  
+  decision:
+    description: "의사결정 기록"
+    required_fields: ["decided_by", "decided_at", "rationale", "affects"]
+    example: "AI 튜터 MVP에 감정 분석 제외 결정"
+  
+  task:
+    description: "실행 작업 (하위 팀에 전달)"
+    required_fields: ["assignee", "due_date", "acceptance_criteria"]
+    example: "학생 진단 화면 설계"
+
+#═══════════════════════════════════════════════════════════════════════════════
+# 【단순화된 문서 구조】 AI PM 친화적
+#═══════════════════════════════════════════════════════════════════════════════
+
+holon_template: |
+  ```json
+  {
+    "holon_id": "<type>-YYYY-NNN>",
+    "slug": "<간결한-영문-식별자>",
+    "type": "<strategy|structure|feature|meeting|decision|task>",
+    "module": "<M00~M21>",
+    
+    "meta": {
+      "title": "<한글 제목>",
+      "created_at": "<YYYY-MM-DD>",
+      "updated_at": "<YYYY-MM-DD>",
+      "status": "<draft|active|completed|archived>",
+      "owner": "<담당자/팀>"
+    },
+
+    "W": {
+      "worldview": {
+        "identity": "<우리는 누구인가?>",
+        "belief": "<우리가 믿는 것은?>",
+        "value_system": "<우리가 중요하게 여기는 것은?>"
+      },
+      "will": {
+        "drive": "<반드시 이루겠다는 강력한 의지>",
+        "commitment": "<어떤 장애물도 넘겠다는 각오>",
+        "non_negotiables": ["<절대 타협하지 않을 것 1>", "<절대 타협하지 않을 것 2>"]
+      },
+      "intention": {
+        "primary": "<가장 핵심적인 의도>",
+        "secondary": ["<부가적 의도>"],
+        "constraints": ["<의도를 약화시키지 않을 경계선>"]
+      },
+      "goal": {
+        "ultimate": "<최종 목표>",
+        "milestones": ["<중간 목표 1>", "<중간 목표 2>"],
+        "kpi": ["<측정 지표>"],
+        "okr": {
+          "objective": "<달성할 목적>",
+          "key_results": ["<핵심 결과>"]
+        }
+      },
+      "activation": {
+        "triggers": ["<W를 재점검해야 할 상황>"],
+        "resonance_check": "<하위 홀론들이 이 W와 공명하는가?>",
+        "drift_detection": "<의지 약화 징후 감지 방법>"
+      }
+    },
+
+    "X": {
+      "context": "<현재 상황/배경>",
+      "current_state": "<현재 진행 상태>",
+      "heartbeat": "<weekly|daily|realtime|monthly>",
+      "signals": ["<관찰할 신호>"],
+      "constraints": ["<제약 1>", "<제약 2>"],
+      "will": "<W의 의지에 맞는 현실을 파악하고 새로운 길을 만들려는 의지>"
+    },
+
+    "S": {
+      "resources": ["<리소스 1>", "<리소스 2>"],
+      "dependencies": ["<의존 holon_id>"],
+      "access_points": ["<접근점>"],
+      "structure_model": "<구조 모델 설명>",
+      "ontology_ref": ["<참조 온톨로지>"],
+      "readiness_score": "<0.0~1.0>",
+      "will": "<W의 의지 실현에 필요한 견고한 리소스 지원 의지>"
+    },
+
+    "P": {
+      "procedure_steps": [
+        {
+          "step_id": "<p001>",
+          "description": "<단계 설명>",
+          "inputs": ["<입력>"],
+          "expected_outputs": ["<출력>"],
+          "tools_required": ["<도구>"]
+        }
+      ],
+      "optimization_logic": "<최적화 로직>",
+      "will": "<W의 의지를 최소 엔트로피로 실행하는 의지>"
+    },
+
+    "E": {
+      "execution_plan": [
+        {
+          "action_id": "<e001>",
+          "action": "<실행 항목>",
+          "eta_hours": "<예상 시간>",
+          "role": "<담당 역할>"
+        }
+      ],
+      "tooling": ["<사용 도구>"],
+      "edge_case_handling": ["<예외 처리>"],
+      "will": "<W의 의지를 실제 행동으로 전환하여 실시간 문제해결 의지>"
+    },
+
+    "R": {
+      "reflection_notes": ["<성찰 노트>"],
+      "lessons_learned": ["<배운 교훈>"],
+      "success_path_inference": "<성공 경로 추론>",
+      "future_prediction": "<미래 예측>",
+      "will": "<W의 의지가 보존되고 있는지 점검하고 성공 경로를 발견하려는 의지>"
+    },
+
+    "T": {
+      "impact_channels": ["<영향 채널>"],
+      "traffic_model": "<트래픽 모델>",
+      "viral_mechanics": "<바이럴 메커니즘>",
+      "bottleneck_points": ["<병목 지점>"],
+      "will": "<W의 의지를 시너지 지점으로 연결하고 전파하려는 의지>"
+    },
+
+    "A": {
+      "abstraction": "<추상화 방향>",
+      "modularization": ["<모듈화 요소>"],
+      "automation_opportunities": ["<자동화 기회>"],
+      "integration_targets": ["<통합 대상 holon_id>"],
+      "resonance_logic": "<상위 W와의 공명 로직>",
+      "will": "<현재 홀론의 성취가 상위 W와 연결되도록 중재하려는 의지>"
+    },
+
+    "links": {
+      "parent": "<상위 holon_id 또는 null>",
+      "children": ["<하위 holon_id>"],
+      "related": ["<관련 holon_id>"],
+      "supersedes": "<대체한 holon_id 또는 null>"
+    }
+  }
+  ```
+
+#═══════════════════════════════════════════════════════════════════════════════
+# 【회의 타입 전용 구조】
+#═══════════════════════════════════════════════════════════════════════════════
+
+meeting_template: |
+  ```json
+  {
+    "holon_id": "meeting-YYYY-NNN",
+    "type": "meeting",
+    
+    "meta": {
+      "title": "<회의 제목>",
+      "date": "<YYYY-MM-DD>",
+      "duration": "<분>",
+      "attendees": ["<참석자>"],
+      "status": "completed"
+    },
+
+    "agenda": [
+      {"topic": "<안건>", "presenter": "<발표자>", "time_allocated": "<분>"}
+    ],
+
+    "discussions": [
+      {"topic": "<주제>", "summary": "<요약>", "key_points": ["<핵심 포인트>"]}
+    ],
+
+    "decisions": [
+      {
+        "decision_id": "decision-YYYY-NNN",
+        "title": "<결정 사항>",
+        "rationale": "<이유>",
+        "decided_by": ["<결정자>"],
+        "affects": ["<영향받는 holon_id>"]
+      }
+    ],
+
+    "next_actions": [
+      {
+        "task_id": "task-YYYY-NNN",
+        "action": "<할 일>",
+        "assignee": "<담당자>",
+        "due_date": "<YYYY-MM-DD>"
+      }
+    ],
+
+    "links": {
+      "parent": "<프로젝트 holon_id>",
+      "spawned_decisions": ["<생성된 decision holon_id>"],
+      "spawned_tasks": ["<생성된 task holon_id>"],
+      "previous_meeting": "<이전 회의 holon_id>",
+      "next_meeting": "<다음 회의 holon_id>"
+    }
+  }
+  ```
+
+#═══════════════════════════════════════════════════════════════════════════════
+# 【AI PM 워크플로우】 자동화 흐름
+#═══════════════════════════════════════════════════════════════════════════════
+
+ai_pm_workflow:
+
+  meeting_preparation:
+    trigger: "회의 24시간 전"
+    actions:
+      - "관련 Holon 자동 수집 (links.related, S.dependencies)"
+      - "미완료 task 상태 확인"
+      - "안건 자동 생성"
+      - "참석자에게 사전 자료 제공"
+  
+  during_meeting:
+    trigger: "회의 진행 중"
+    actions:
+      - "논의 내용 실시간 기록"
+      - "결정 사항 추출"
+      - "Action Item 자동 생성"
+      - "WXSPERTA 슬롯 자동 매핑"
+  
+  post_meeting:
+    trigger: "회의 종료 후"
+    actions:
+      - "Meeting Holon 생성 (자동)"
+      - "Decision Holon 생성 (각 결정마다)"
+      - "Task Holon 생성 (각 Action Item마다)"
+      - "영향받는 문서의 links 자동 업데이트"
+      - "다음 회의 안건 예약"
+  
+  task_tracking:
+    trigger: "매일 오전"
+    actions:
+      - "마감 임박 task 알림"
+      - "지연 task 에스컬레이션"
+      - "완료 task의 상위 Holon 상태 업데이트"
+
+#═══════════════════════════════════════════════════════════════════════════════
+# 【참조 규칙】 단순화된 링크 관리
+#═══════════════════════════════════════════════════════════════════════════════
+
+link_rules:
+
+  principle: |
+    ✔ 모든 참조는 문서 내 links 섹션에서만 관리
+    ✔ 별도의 graph.json 없음 (이중 관리 방지)
+    ✔ AI PM이 역참조 자동 업데이트 담당
+
+  when_creating_link:
+    - "A가 B를 참조하면 → A의 links에 B 추가"
+    - "동시에 B의 links.related에 A 추가 (AI PM 자동)"
+  
+  link_types:
+    parent: "상위 Holon (1개만)"
+    children: "하위 Holon (배열)"
+    related: "관련 Holon (양방향)"
+    supersedes: "대체한 이전 버전"
+    spawned_from: "생성 원천 (회의 → 결정 등)"
+
+#═══════════════════════════════════════════════════════════════════════════════
+# 【holon_id 명명 규칙】 필수 준수
+#═══════════════════════════════════════════════════════════════════════════════
+
+holon_id_rules:
+
+  formats:
+    # 레거시 형식 (기존 문서)
+    legacy: "hte-<category>-<NNN>"
+    legacy_examples:
+      - "hte-doc-000"      # 문서
+      - "hte-framework-001" # 프레임워크
+    
+    # 신규 형식 (권장)
+    new: "<type>-<YYYY>-<NNN>"
+    new_examples:
+      - "strategy-2025-001"  # 전략
+      - "structure-2025-002" # 구조
+      - "feature-2025-012"   # 기능
+      - "meeting-2025-028"   # 회의
+      - "decision-2025-015"  # 결정
+      - "task-2025-089"      # 작업
+  
+  rules:
+    - "holon_id는 시스템 전체에서 유일해야 함"
+    - "신규 문서는 new 형식 사용 권장"
+    - "기존 문서의 holon_id 변경 불가 (참조 깨짐 방지)"
+    - "NNN은 해당 타입+연도 내에서 순차 증가"
+
+#═══════════════════════════════════════════════════════════════════════════════
+# 【파일명 규칙】 PM 시스템용
+#═══════════════════════════════════════════════════════════════════════════════
+
+filename_rules:
+
+  pattern: "<type>-<YYYY>-<NNN>-<slug>.md"
+  
+  examples:
+    - "strategy-2025-001-market-domination.md"
+    - "feature-2025-012-ai-tutor-diagnosis.md"
+    - "meeting-2025-028-mvp-scope.md"
+    - "decision-2025-015-exclude-emotion-analysis.md"
+    - "task-2025-089-design-student-dashboard.md"
+
+  folder_structure: |
+    0 Docs/
+    ├── holons/           # 전략/구조/기능 Holon
+    ├── meetings/         # 회의 기록
+    ├── decisions/        # 의사결정 기록
+    └── tasks/            # 작업 항목
+
+#═══════════════════════════════════════════════════════════════════════════════
+# 【모듈 정의】 M00~M21
+#═══════════════════════════════════════════════════════════════════════════════
+
+modules:
+  M00_Astral: "전략/세계관"
+  M01_TimeCrystal: "시간·경영·의사결정"
+  M02_TimelineGenesis: "조직 운영 리듬·프로세스"
+  M03_BusinessModel: "비즈니스모델"
+  M04_KPI_OKR: "KPI/OKR"
+  M05_FinancialGrowth: "재무 성장경로"
+  M06_SWOT: "SWOT 분석"
+  M07_BizWeighing: "사업 비중/위율 전략"
+  M08_InternalBranding: "내부 브랜딩"
+  M09_VerticalBranding: "버티컬 브랜딩"
+  M10_AgentGarden: "AI Agent / Holon 구조"
+  M11_ServicePipeline: "서비스 파이프라인"
+  M12_ExternalBranding: "외부 브랜딩"
+  M13_TrackGrowthEngine: "성장 엔진"
+  M14_CompanyOnboarding: "온보딩/교육"
+  M15_TimeCrystalCEO: "리더십/CEO 원리"
+  M16_AIMindArchitecture: "AI Mind Architecture"
+  M17_NervousSystem: "신경계/데이터 파이프라인"
+  M18_InformationBlocks: "정보 스택/지능 블럭"
+  M19_CompanyCulture: "기업문화"
+  M20_KnowledgeCrystal: "지식결정생성기"
+  M21_SoftwareBackbone: "소프트웨어 백본"
+
+#═══════════════════════════════════════════════════════════════════════════════
+# 【WXSPERTA 슬롯 정의】 각 슬롯의 역할
+#═══════════════════════════════════════════════════════════════════════════════
+
+wxsperta_slots:
+  W:
+    name: "W = Worldview + Will + Intention + Goal (핵심 동력원)"
+    components:
+      worldview: "정체성, 신념, 가치 체계"
+      will: "반드시 이루겠다는 강력한 의지, 타협 불가 사항"
+      intention: "핵심 의도와 부가 의도, 의도 보호 경계선"
+      goal: "최종 목표, 마일스톤, KPI, OKR"
+    question: "왜 존재하며, 무엇을 반드시 이루려 하는가?"
+    activation: |
+      W는 단순 슬롯이 아니라 모든 XSPERTA를 동작시키는 동력원이다.
+      W의 의지가 새겨지고 → 보존되며 성장하고 → 강화되어 → 완성된다.
+      의지 약화 경로로 진입하지 않는 것이 가장 중요하다.
+  
+  X:
+    name: "conteXt - 맥락지능"
+    purpose: "현재 상황, 실시간 데이터, Heartbeat, 환경 신호"
+    question: "지금 어떤 상황인가?"
+    will: "W의 의지에 맞는 현실을 파악하고 새로운 길을 만들기 위한 전략 제공"
+  
+  S:
+    name: "Structure - 구조지능"
+    purpose: "구성요소, 리소스, 온톨로지, 접근성, 즉시 사용성"
+    question: "무엇으로 구성되는가?"
+    will: "W의 의지 실현에 필요한 견고한 리소스 지원"
+  
+  P:
+    name: "Process - 절차지능"
+    purpose: "단계, 흐름, 최적화 로직"
+    question: "어떤 순서로 진행되는가?"
+    will: "W의 의지를 최소 엔트로피로 실행하는 완벽한 접근법 설계"
+  
+  E:
+    name: "Execution - 실행지능"
+    purpose: "실제 행동, 도구, 담당자, 일정"
+    question: "누가 언제 무엇을 하는가?"
+    will: "W의 의지를 실제 행동으로 전환하여 실시간 문제해결"
+  
+  R:
+    name: "Reflection - 성찰지능 & Route finding"
+    purpose: "통찰, 리스크, 교훈, 비밀경로 탐색"
+    question: "무엇을 배웠으며, W의 의지가 보존되고 있는가?"
+    will: "의지 약화 징후 감지, 성공 경로 발견"
+  
+  T:
+    name: "Transmission - 전파지능 (Traffic)"
+    purpose: "영향, 전달, 확산, 바이럴"
+    question: "W의 의지가 어디로 전파되는가?"
+    will: "시너지 연결, 가치 확산"
+  
+  A:
+    name: "Abstraction - 고도화지능 (Astral Ascend)"
+    purpose: "추상화, 모듈화, 고도화, 상위 홀론과 공명"
+    question: "어떻게 진화하며 상위 W와 공명하는가?"
+    will: "현재 홀론의 성취가 상위 홀론의 W와 연결되도록 중재"
+
+#═══════════════════════════════════════════════════════════════════════════════
+# 【기능 제안 레벨】 세부 개발은 하위 팀
+#═══════════════════════════════════════════════════════════════════════════════
+
+feature_level_definition:
+  
+  scope: |
+    이 시스템은 "기능 제안" 레벨까지만 다룬다.
+    세부 기능 개발은 전체 설계의 하위 과정으로 별도 진행.
+  
+  feature_holon_includes:
+    - "기능 목적 (W)"
+    - "사용자 시나리오 (X)"
+    - "핵심 구성요소 (S)"
+    - "대략적 흐름 (P)"
+    - "담당 팀 지정 (E)"
+    - "리스크 및 고려사항 (R)"
+  
+  feature_holon_excludes:
+    - "상세 UI/UX 디자인"
+    - "데이터베이스 스키마"
+    - "API 상세 명세"
+    - "코드 구현"
+  
+  handoff_to_dev_team:
+    trigger: "feature Holon 상태가 'approved'로 변경"
+    actions:
+      - "Task Holon 자동 생성"
+      - "개발팀에 할당"
+      - "상위 feature Holon과 링크"
+
+#═══════════════════════════════════════════════════════════════════════════════
+# 【W Activation 동작】 의지 보존 메커니즘
+#═══════════════════════════════════════════════════════════════════════════════
+
+w_activation:
+
+  principle: |
+    W는 단순 정보 슬롯이 아니라 모든 XSPERTA를 동작시키는 핵심 동력원이다.
+    의지가 새겨지고 → 보존되며 성장하고 → 강화되어 → 완성된다.
+    의지 약화 경로로 진입하지 않는 것이 가장 중요하다.
+
+  resonance_check:
+    description: "하위 홀론이 상위 W와 공명하는지 검증"
+    method: |
+      1. 상위 홀론의 W.will.drive에서 핵심 키워드 추출
+      2. 하위 홀론의 W.will.drive에 핵심 키워드 포함 여부 확인
+      3. 30% 미만 공명 시 경고
+    automation: "_validate.py 실행 시 자동 검증"
+    
+  drift_detection:
+    description: "의지 약화 징후 감지"
+    signals:
+      - "핵심 목표에서 벗어나는 기능 추가"
+      - "복잡성 증가"
+      - "KPI 하락"
+      - "관료주의 증가"
+      - "학습 속도 저하"
+    action: "W.activation.triggers 발생 시 문서 재검토 필수"
+  
+  will_preservation:
+    description: "의지 보존 원칙"
+    rules:
+      - "모든 결정은 상위 W.will.drive와 정렬되어야 함"
+      - "기능 추가 시 W.intention.constraints 위반 검증"
+      - "W.will.non_negotiables는 절대 타협 불가"
+    enforcement: |
+      AI PM은 모든 문서 생성/수정 시:
+      1. 상위 W와의 정렬 확인
+      2. non_negotiables 위반 여부 확인
+      3. drift 신호 감지 시 경고
+
+#═══════════════════════════════════════════════════════════════════════════════
+# 【90% 완성도 원칙】 불확실성 버퍼
+#═══════════════════════════════════════════════════════════════════════════════
+
+completeness_90_principle:
+
+  description: |
+    문서 완성도를 100%가 아니라 90%로 고정한다.
+    나머지 10%는 현실 세계의 불확실성을 위한 버퍼.
+
+  why_90_percent:
+    uncertainty_buffer: |
+      현실 세계는 완전한 W 구조나 WXSPERTA 일관성이 항상 불가능.
+      문서 기반 PM/회의 시스템은 본질적으로
+      - 누락, 변화, 모순, 불명확성, 새 정보 유입
+      같은 "현실적 노이즈"를 포함함.
+    
+    anti_loop_mechanism: |
+      완성도 100%를 요구하면 AI는 무한 루프에 빠짐:
+      - 부족한 10%를 채우려고 계속 수정
+      - 그 10%는 실존적으로 채울 수 없는 부분
+      - → 다시 수정 → 다시 수정 → 무한 루프
       
-      - P/T/V/A 번호는 기본값 01/01/00/00으로 맞춘다
-      - 나중에 문서가 많아지면 번호는 LLM이 자동 증가시킬 수 있음
+      90% 기준은 "채울 수 없는 부분을 시스템이 애초에 인정"하게 함.
+      AI가 계속 채우려 하지 않으므로 루프가 멈춤.
+    
+    team_onboarding: |
+      100% 요구 시:
+      - 신규 팀원 부담 증가
+      - 규칙 위반 많아짐
+      - 문서 작성 자체가 어려워짐
+      
+      90% 허용 시:
+      - 핵심 의지 + 구조적 슬롯만 채워도 인정
+      - 자연스러운 성장/적응 가능
 
-      ------------------------------------------------------------
-      3) 최종 경로
-      ------------------------------------------------------------
-      HTE/<ModuleFolder>/<filename>
+  score_system:
+    dimensions:
+      structure: "W 구조 완전성 (25%)"
+      completeness: "내용 채움 정도 - 플레이스홀더 감지 (25%)"
+      resonance: "상위 W와 공명 (25%)"
+      links: "참조 일관성 (25%)"
+    
+    pass_threshold: 0.90
+    
+    evaluation:
+      "≥ 90%": "✅ 통과 - 시스템 정상 작동"
+      "80-89%": "📝 개선 권장 - 제안만 출력, 강제 수정 없음"
+      "< 80%": "⚠️ 주의 필요 - 핵심 구조 확인 권장"
 
-      ------------------------------------------------------------
-      4) 파일 내부 템플릿
-      ------------------------------------------------------------
+  what_changes:
+    - "문서의 절대 완성 → 상대적 완성"
+    - "규칙 기반 → 편차 허용 기반"
+    - "기계적 갱신 → 평가적 갱신"
+    - "무한 루프 위험 → 안정적 업데이트"
 
-      ---
-      title: "<문서 제목>"
-      holon-module: "<M코드>"
-      description: "<LLM이 생성한 1~2문장 요약>"
-      wxspert-layer: ["W","X","S","P","E","R","T","A"]
-      ---
+  what_stays:
+    - "W 구조"
+    - "Links 구조"
+    - "Holon ID 규칙"
+    - "WXSPERTA 키 슬롯"
+    - "PM 자동화 로직"
 
-      # <문서 제목>
+  update_pipeline:
+    old_way: |
+      문서 저장 → 규칙 위반 발견 → AI 강제 수정 → 다시 저장 → 무한 루프
+    
+    new_way: |
+      문서 저장 → 스코어 계산 → 부족한 10%는 개선 제안만 생성 → 끝
+      - 루프 없음
+      - 과도한 강제 없음
+      - 작성자 자율성 존중
 
-      (여기에 문서 내용을 작성하세요)
+  validation_behavior:
+    script: "0 Docs/holons/_validate.py"
+    output_format: |
+      📋 문서별 스코어:
+      ─────────────────────────────────────────────────────────
+      문서                           구조    완성    공명    링크    총점
+      ─────────────────────────────────────────────────────────
+      ✅ hte-doc-000                  100%    100%    100%    100%    100%
+      ✅ strategy-2025-001             95%     92%     90%    100%     94%
+      📝 feature-2025-001              90%     45%     85%    100%     80%
+      
+      💡 개선 제안 (선택사항):
+      - feature-2025-001: 플레이스홀더 12개 발견 - 내용 채움 권장
+    
+    key_principle: |
+      개선 제안은 "선택사항"이다.
+      시스템이 강제로 수정하지 않는다.
+      핵심 메커니즘은 보존되면서 경직된 구조만 부드러워진다.
 
+#═══════════════════════════════════════════════════════════════════════════════
+# 【견고성 규칙】 시스템 무결성 보장
+#═══════════════════════════════════════════════════════════════════════════════
+
+integrity_rules:
+
+  document_rules:
+    - "모든 문서는 Holon JSON으로 시작해야 함"
+    - "holon_id는 시스템 내 유일해야 함"
+    - "모든 WXSPERTA 슬롯에 will 필드 필수"
+    - "W는 반드시 5개 섹션 포함 (worldview/will/intention/goal/activation)"
+    - "links.parent가 있으면 해당 문서의 links.children에도 존재해야 함"
+  
+  reference_rules:
+    - "참조하는 holon_id는 실제 존재해야 함"
+    - "순환 참조 (A→B→C→A) 금지"
+    - "orphan 문서 (parent 없는 비-root) 경고"
+  
+  resonance_rules:
+    - "하위 홀론의 W.will.drive는 상위 핵심 키워드 30% 이상 포함"
+    - "W.activation.resonance_check 필드 필수"
+    - "_validate.py 정기 실행으로 공명 검증"
+  
+  pm_rules:
+    - "meeting → decision 생성 시 links.spawned_from 필수"
+    - "decision → task 생성 시 affects와 links 동기화"
+    - "task 완료 시 상위 Holon 상태 업데이트"
+  
+  validation:
+    script: "0 Docs/holons/_validate.py"
+    frequency: "문서 생성/수정 후 반드시 실행"
+    command: "python '0 Docs/holons/_validate.py'"
+
+#═══════════════════════════════════════════════════════════════════════════════
+# 【AI PM 명령어】 문서 조작 방법
+#═══════════════════════════════════════════════════════════════════════════════
+
+ai_pm_commands:
+
+  create:
+    description: "새 Holon 생성"
+    usage: "create <type> '<title>'"
+    example: "create feature '학생 진단 리포트'"
+    actions:
+      - "holon_id 자동 생성"
+      - "템플릿 기반 구조 생성"
+      - "parent 지정 시 양방향 링크 업데이트"
+  
+  link:
+    description: "문서 간 링크 생성"
+    usage: "link <from_id> <relation> <to_id>"
+    example: "link feature-2025-001 child_of strategy-2025-001"
+    actions:
+      - "from 문서의 links 업데이트"
+      - "to 문서의 역참조 자동 추가"
+  
+  update_status:
+    description: "상태 변경"
+    usage: "update_status <holon_id> <new_status>"
+    example: "update_status task-2025-001 completed"
+    actions:
+      - "해당 문서 meta.status 업데이트"
+      - "상위 Holon 영향 분석"
+      - "필요시 다음 워크플로우 트리거"
+  
+  spawn_meeting:
+    description: "회의 결과로 문서 생성"
+    usage: "spawn_meeting <meeting_id>"
+    actions:
+      - "decisions 배열에서 Decision Holon 각각 생성"
+      - "next_actions 배열에서 Task Holon 각각 생성"
+      - "모든 links 자동 연결"
+
+#═══════════════════════════════════════════════════════════════════════════════
+# 【요약】 시스템의 본질
+#═══════════════════════════════════════════════════════════════════════════════
+
+summary: |
+  이 시스템은 AI PM 기반 회의 자동화 및 프로젝트 오케스트레이션을 위한 것이다.
+  
+  핵심 특징:
+  ✔ Single Source of Truth - 문서가 유일한 진실 (이중 관리 없음)
+  ✔ PM 워크플로우 - 회의 → 결정 → 작업 자동 흐름
+  ✔ 기능 제안 레벨 - 세부 개발은 하위 팀
+  ✔ 견고한 구조 - 무결성 규칙으로 시스템 일관성 보장
+  
+  목표:
+  전국 규모 수학 학원 자동화 시스템 구축을 위한
+  전략/설계/관리 레벨의 견고한 오케스트레이션
