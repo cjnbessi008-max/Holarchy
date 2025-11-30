@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """
-Holarchy 통합 CLI
-- 모든 자동화 도구를 하나의 인터페이스로 통합
+Holarchy Self-Healing CLI v2.0
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- 모든 명령은 "기록만, 중단 없음"
+- 시스템은 절대 멈추지 않음
+- 수정은 항상 선택사항
 """
 
 import argparse
@@ -13,11 +16,133 @@ script_dir = Path(__file__).parent
 sys.path.insert(0, str(script_dir))
 
 
-def cmd_validate(args):
-    """검증 실행"""
+def cmd_check(args):
+    """Self-Healing 검사 (기록만, 중단 없음)"""
     from _validate import HolarchyValidator
     validator = HolarchyValidator(str(script_dir.parent))
     validator.run_all_validations()
+    # Self-Healing: 항상 성공
+
+
+def cmd_risk(args):
+    """위험도 점수 확인"""
+    import json
+    reports_path = script_dir.parent / "reports" / "risk_score.json"
+    
+    print("=" * 60)
+    print("📊 Self-Healing 위험도 점수")
+    print("   (참고용 - 낮아도 시스템 정상 작동)")
+    print("=" * 60)
+    print()
+    
+    if not reports_path.exists():
+        print("⚠️  risk_score.json 없음")
+        print("💡 'python _cli.py check' 먼저 실행하세요")
+        return
+    
+    with open(reports_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    
+    score = data.get("overall_score", 0)
+    risk_level = data.get("risk_level", "unknown")
+    
+    emoji = "🟢" if risk_level == "low" else ("🟡" if risk_level == "medium" else "🔴")
+    print(f"{emoji} 전체 점수: {score}% ({risk_level.upper()})")
+    print()
+    
+    print("📋 세부 점수:")
+    breakdown = data.get("breakdown", {})
+    for key, value in breakdown.items():
+        print(f"   {key}: {value}%")
+    print()
+    
+    print("ℹ️  " + data.get("system_note", ""))
+
+
+def cmd_suggest(args):
+    """자동 수정 추천 보기"""
+    import json
+    reports_path = script_dir.parent / "reports" / "suggestions.json"
+    
+    print("=" * 60)
+    print("💡 Self-Healing 수정 추천")
+    print("   (선택사항 - 무시해도 시스템 정상 작동)")
+    print("=" * 60)
+    print()
+    
+    if not reports_path.exists():
+        print("⚠️  suggestions.json 없음")
+        print("💡 'python _cli.py check' 먼저 실행하세요")
+        return
+    
+    with open(reports_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    
+    suggestions = data.get("suggestions", [])
+    
+    if not suggestions:
+        print("✅ 수정 추천 없음 - 모든 문서가 양호합니다")
+        return
+    
+    for item in suggestions:
+        print(f"📄 {item['holon_id']} (현재 {item['current_score']}% → 목표 {item['target_score']}%)")
+        for s in item.get("suggestions", []):
+            print(f"   → {s}")
+        print()
+
+
+def cmd_report(args):
+    """현재 이슈 리포트 보기"""
+    import json
+    reports_path = script_dir.parent / "reports" / "issues.json"
+    
+    print("=" * 60)
+    print("📋 Self-Healing 이슈 리포트")
+    print("   (기록만 - 시스템 중단 없음)")
+    print("=" * 60)
+    print()
+    
+    if not reports_path.exists():
+        print("⚠️  issues.json 없음")
+        print("💡 'python _cli.py check' 먼저 실행하세요")
+        return
+    
+    with open(reports_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    
+    print(f"📅 생성 시각: {data.get('generated_at', 'N/A')}")
+    print(f"📊 총 이슈: {data.get('total_issues', 0)}개")
+    print()
+    
+    by_severity = data.get("by_severity", {})
+    print("📈 심각도별:")
+    print(f"   🔴 error: {by_severity.get('error', 0)}")
+    print(f"   🟡 warning: {by_severity.get('warning', 0)}")
+    print(f"   ℹ️  info: {by_severity.get('info', 0)}")
+    print()
+    
+    issues = data.get("issues", [])
+    if issues:
+        print("📋 이슈 목록 (상위 10개):")
+        print("-" * 60)
+        for issue in issues[:10]:
+            severity_emoji = {"error": "🔴", "warning": "🟡", "info": "ℹ️"}.get(issue["severity"], "❓")
+            print(f"{severity_emoji} [{issue['holon_id']}] {issue['message']}")
+        
+        if len(issues) > 10:
+            print(f"   ... 외 {len(issues) - 10}개")
+    print()
+    
+    print("ℹ️  " + data.get("system_note", ""))
+
+
+# 기존 validate 명령어 유지 (check로 리다이렉트)
+def cmd_validate(args):
+    """검증 실행 (check로 리다이렉트)"""
+    print("ℹ️  validate 명령이 check로 변경되었습니다.")
+    print("   Self-Healing 모드: 기록만, 시스템 중단 없음")
+    print()
+    cmd_check(args)
 
 
 def cmd_link(args):
@@ -219,13 +344,23 @@ def cmd_help(args):
     """도움말"""
     print("""
 ╔══════════════════════════════════════════════════════════════╗
-║           🏛️ Holarchy CLI - 명령어 가이드                   ║
+║       🔥 Holarchy Self-Healing CLI v2.0 - 명령어 가이드     ║
 ╠══════════════════════════════════════════════════════════════╣
+║                                                              ║
+║  ⚡ Self-Healing 핵심 명령어 (NEW)                           ║
+║  ──────────────────────────────────────────────────────────  ║
+║  check              문서 검사 (기록만, 시스템 중단 없음)     ║
+║  risk               위험도 점수 확인 (참고용)                ║
+║  suggest            자동 수정 추천 보기                      ║
+║  report             현재 이슈 리포트 보기                    ║
+║                                                              ║
+║  * 모든 결과는 0 Docs/reports/에 저장                        ║
+║  * 시스템은 절대 멈추지 않음                                 ║
+║  * 수정은 항상 선택사항                                      ║
 ║                                                              ║
 ║  📋 기본 명령어                                              ║
 ║  ──────────────────────────────────────────────────────────  ║
 ║  status              시스템 상태 확인                        ║
-║  validate            전체 문서 검증                          ║
 ║  link                양방향 링크 자동 동기화                 ║
 ║                                                              ║
 ║  📄 문서 생성                                                ║
@@ -234,39 +369,24 @@ def cmd_help(args):
 ║    type: strategy, structure, feature, meeting,              ║
 ║          decision, task                                      ║
 ║                                                              ║
-║  예시:                                                       ║
-║    create feature "학생 진단 리포트" --parent hte-doc-002    ║
-║    create meeting "MVP 기능 논의"                            ║
-║                                                              ║
 ║  🚀 회의 자동화                                              ║
 ║  ──────────────────────────────────────────────────────────  ║
 ║  spawn <meeting_id>  회의에서 Decision/Task 자동 생성        ║
 ║                                                              ║
-║  예시:                                                       ║
-║    spawn meeting-2025-001                                    ║
-║                                                              ║
-║  🧠 Working Memory (Chunk 시스템)                            ║
+║  🧠 Working Memory                                           ║
 ║  ──────────────────────────────────────────────────────────  ║
 ║  chunk generate    W 기반 중요도로 Active Chunk 생성         ║
 ║  chunk show        현재 Active Chunk 표시                    ║
 ║                                                              ║
-║  * Chunk는 W(의지)와의 공명도로 중요도 판단                  ║
-║  * 항상 Top-7만 유지 (인간 작업기억 모방)                    ║
-║                                                              ║
-║  🔬 Meta-Research Engine                                     ║
+║  🔬 Meta-Research                                            ║
 ║  ──────────────────────────────────────────────────────────  ║
 ║  meta analyze      프로젝트 간 관계 분석                     ║
 ║  meta report       정제 제안 리포트 생성                     ║
 ║                                                              ║
-║  🏥 System Health Check                                      ║
+║  🏥 Health (참고용)                                          ║
 ║  ──────────────────────────────────────────────────────────  ║
 ║  health check      8개 영역 건강 점검                        ║
 ║  health report     건강 점검 리포트 저장                     ║
-║                                                              ║
-║  * 상위 구조 안정성 / 프로젝트 폭발 위험                     ║
-║  * 링크 구조 붕괴 / 연구 프로세스 품질                       ║
-║  * 메타 엔진 / 문서 질 / 자동화 안정성                       ║
-║  * 사람 개입 지점 점검                                       ║
 ║                                                              ║
 ╚══════════════════════════════════════════════════════════════╝
     """)
@@ -274,14 +394,31 @@ def cmd_help(args):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Holarchy 통합 CLI",
+        description="Holarchy Self-Healing CLI v2.0",
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
     
     subparsers = parser.add_subparsers(dest="command", help="명령어")
     
-    # validate
-    parser_validate = subparsers.add_parser("validate", help="전체 문서 검증")
+    # Self-Healing 핵심 명령어
+    # check (NEW - 핵심)
+    parser_check = subparsers.add_parser("check", help="문서 검사 (Self-Healing)")
+    parser_check.set_defaults(func=cmd_check)
+    
+    # risk (NEW)
+    parser_risk = subparsers.add_parser("risk", help="위험도 점수 확인")
+    parser_risk.set_defaults(func=cmd_risk)
+    
+    # suggest (NEW)
+    parser_suggest = subparsers.add_parser("suggest", help="자동 수정 추천 보기")
+    parser_suggest.set_defaults(func=cmd_suggest)
+    
+    # report (NEW)
+    parser_report = subparsers.add_parser("report", help="현재 이슈 리포트")
+    parser_report.set_defaults(func=cmd_report)
+    
+    # validate (기존 - check로 리다이렉트)
+    parser_validate = subparsers.add_parser("validate", help="검증 (check로 리다이렉트)")
     parser_validate.set_defaults(func=cmd_validate)
     
     # link

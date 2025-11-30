@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """
-🏥 System Health Check Engine - 구조 붕괴 방지 정기 진단
+🔥 Self-Healing Health Check Engine v2.0
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-목적:
-- 복잡도 증가 → 구조 붕괴로 이어지는 위험을 정기적으로 안정화
-- 8개 영역 정기 점검 체크리스트 자동 실행
+Self-Healing 모드:
+- 점검 결과는 참고용 (강제 아님)
+- 낮은 점수도 시스템 중단 없음
+- 모든 결과는 기록만
 
 8개 점검 영역:
 1. 상위 구조(Top-down Constitution) 안정성

@@ -1,0 +1,84 @@
+{
+  "generated_at": "2025-11-30T13:03:45.969254",
+  "total_issues": 12,
+  "by_severity": {
+    "error": 0,
+    "warning": 0,
+    "info": 12
+  },
+  "issues": [
+    {
+      "holon_id": "hte-doc-000",
+      "severity": "info",
+      "message": "플레이스홀더 2개 발견 - 내용 채움 권장",
+      "score": 0.99
+    },
+    {
+      "holon_id": "hte-doc-001",
+      "severity": "info",
+      "message": "플레이스홀더 28개 발견 - 내용 채움 권장",
+      "score": 0.91
+    },
+    {
+      "holon_id": "hte-doc-003",
+      "severity": "info",
+      "message": "플레이스홀더 27개 발견 - 내용 채움 권장",
+      "score": 0.92
+    },
+    {
+      "holon_id": "hte-doc-004",
+      "severity": "info",
+      "message": "플레이스홀더 27개 발견 - 내용 채움 권장",
+      "score": 0.92
+    },
+    {
+      "holon_id": "hte-doc-005",
+      "severity": "info",
+      "message": "플레이스홀더 33개 발견 - 내용 채움 권장",
+      "score": 0.91
+    },
+    {
+      "holon_id": "feature-2025-001",
+      "severity": "info",
+      "message": "플레이스홀더 21개 발견 - 내용 채움 권장",
+      "score": 0.87
+    },
+    {
+      "holon_id": "feature-2025-001",
+      "severity": "info",
+      "message": "상위 키워드 추가 권장: {'시장'}",
+      "score": 0.87
+    },
+    {
+      "holon_id": "feature-2025-002",
+      "severity": "info",
+      "message": "플레이스홀더 1개 발견 - 내용 채움 권장",
+      "score": 0.87
+    },
+    {
+      "holon_id": "feature-2025-002",
+      "severity": "info",
+      "message": "상위 키워드 추가 권장: {'학원', '자동화'}",
+      "score": 0.87
+    },
+    {
+      "holon_id": "strategy-2025-001",
+      "severity": "info",
+      "message": "플레이스홀더 1개 발견 - 내용 채움 권장",
+      "score": 1.0
+    },
+    {
+      "holon_id": "hte-framework-001",
+      "severity": "info",
+      "message": "플레이스홀더 2개 발견 - 내용 채움 권장",
+      "score": 0.74
+    },
+    {
+      "holon_id": "hte-framework-001",
+      "severity": "info",
+      "message": "상위 키워드 추가 권장: {'학원', '전국', '수학'}",
+      "score": 0.74
+    }
+  ],
+  "system_note": "Self-Healing 모드 - 이 파일은 문제를 기록만 합니다. 시스템은 멈추지 않습니다."
+}

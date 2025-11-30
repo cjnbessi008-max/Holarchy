@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-Holarchy 문서 시스템 검증 스크립트 v3.0
+Holarchy Self-Healing 검증 시스템 v4.0
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🎯 90% 완성도 원칙
-━━━━━━━━━━━━━━━━━━
-- 완성도 100%를 요구하지 않음
-- 90% 이상이면 "통과" (나머지 10%는 불확실성 버퍼)
-- 개선 제안만 출력, 강제 수정 없음
-- 무한 루프 방지, 경직성 완화
+🔥 Self-Healing 모드
+━━━━━━━━━━━━━━━━━━━━
+- 검증 실패 → 시스템 중단 (X)
+- 검증 실패 → 문제 기록만 (O)
+- 모든 결과는 reports/issues.json에 저장
+- 시스템은 절대 멈추지 않음
 
-📊 스코어 시스템
-━━━━━━━━━━━━━━━━━━
+📊 스코어 시스템 (참고용)
+━━━━━━━━━━━━━━━━━━━━━━━━━━
 - structure: W 구조 완전성 (25%)
 - completeness: 내용 채움 정도 (25%)
 - resonance: 상위 W와 공명 (25%)
@@ -26,8 +26,11 @@ from dataclasses import dataclass, field
 from datetime import datetime
 
 
-# 90% 기준
+# 90% 기준 (참고용, 강제 아님)
 PASS_THRESHOLD = 0.90
+
+# Self-Healing 모드: 결과 저장 경로
+REPORTS_DIR = Path(__file__).parent.parent / "reports"
 
 
 @dataclass
@@ -248,10 +251,90 @@ class HolarchyValidator:
             else:
                 score.links = sum(checks) / len(checks)
     
+    def save_to_reports(self) -> None:
+        """Self-Healing: 결과를 reports 폴더에 저장 (기록만, 시스템 중단 없음)"""
+        REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+        
+        # issues.json 생성
+        issues = []
+        for holon_id, score in self.scores.items():
+            for suggestion in score.suggestions:
+                severity = "info"
+                if "존재하지 않음" in suggestion or "찾을 수 없음" in suggestion:
+                    severity = "warning"
+                    
+                issues.append({
+                    "holon_id": holon_id,
+                    "severity": severity,
+                    "message": suggestion,
+                    "score": round(score.total, 2)
+                })
+        
+        issues_data = {
+            "generated_at": datetime.now().isoformat(),
+            "total_issues": len(issues),
+            "by_severity": {
+                "error": sum(1 for i in issues if i["severity"] == "error"),
+                "warning": sum(1 for i in issues if i["severity"] == "warning"),
+                "info": sum(1 for i in issues if i["severity"] == "info")
+            },
+            "issues": issues,
+            "system_note": "Self-Healing 모드 - 이 파일은 문제를 기록만 합니다. 시스템은 멈추지 않습니다."
+        }
+        
+        with open(REPORTS_DIR / "issues.json", "w", encoding="utf-8") as f:
+            json.dump(issues_data, f, ensure_ascii=False, indent=2)
+        
+        # risk_score.json 생성
+        avg_score = sum(s.total for s in self.scores.values()) / len(self.scores) if self.scores else 1.0
+        avg_structure = sum(s.structure for s in self.scores.values()) / len(self.scores) if self.scores else 1.0
+        avg_completeness = sum(s.completeness for s in self.scores.values()) / len(self.scores) if self.scores else 1.0
+        avg_resonance = sum(s.resonance for s in self.scores.values()) / len(self.scores) if self.scores else 1.0
+        avg_links = sum(s.links for s in self.scores.values()) / len(self.scores) if self.scores else 1.0
+        
+        risk_level = "low" if avg_score >= 0.9 else ("medium" if avg_score >= 0.7 else "high")
+        
+        risk_data = {
+            "generated_at": datetime.now().isoformat(),
+            "overall_score": round(avg_score * 100),
+            "breakdown": {
+                "structure": round(avg_structure * 100),
+                "completeness": round(avg_completeness * 100),
+                "links": round(avg_links * 100),
+                "resonance": round(avg_resonance * 100)
+            },
+            "risk_level": risk_level,
+            "system_note": "점수는 참고용입니다. 낮아도 시스템은 정상 작동합니다."
+        }
+        
+        with open(REPORTS_DIR / "risk_score.json", "w", encoding="utf-8") as f:
+            json.dump(risk_data, f, ensure_ascii=False, indent=2)
+        
+        # suggestions.json 생성
+        suggestions = []
+        for holon_id, score in self.scores.items():
+            if not score.passed and score.suggestions:
+                suggestions.append({
+                    "holon_id": holon_id,
+                    "current_score": round(score.total * 100),
+                    "target_score": 90,
+                    "suggestions": score.suggestions[:5]
+                })
+        
+        suggestions_data = {
+            "generated_at": datetime.now().isoformat(),
+            "suggestions": suggestions,
+            "system_note": "자동 생성된 수정 추천 목록 (선택사항)"
+        }
+        
+        with open(REPORTS_DIR / "suggestions.json", "w", encoding="utf-8") as f:
+            json.dump(suggestions_data, f, ensure_ascii=False, indent=2)
+    
     def run_all_validations(self) -> None:
-        """모든 검증 실행"""
+        """모든 검증 실행 (Self-Healing: 기록만, 중단 없음)"""
         print("=" * 70)
-        print("🔍 Holarchy 문서 시스템 검증 v3.0 (90% 완성도 원칙)")
+        print("🔥 Holarchy Self-Healing 검증 v4.0")
+        print("   (문제 기록만, 시스템 중단 없음)")
         print("=" * 70)
         print()
         
@@ -289,50 +372,49 @@ class HolarchyValidator:
         print("-" * 70)
         print()
         
+        # Self-Healing: 결과 저장
+        self.save_to_reports()
+        print(f"💾 결과 저장됨: {REPORTS_DIR}/")
+        print(f"   - issues.json ({sum(len(s.suggestions) for s in self.scores.values())}개 이슈)")
+        print(f"   - risk_score.json")
+        print(f"   - suggestions.json")
+        print()
+        
         # 개선 제안 (강제 아님)
         if needs_improvement:
-            print("💡 개선 제안 (선택사항):")
+            print("💡 개선 제안 (선택사항 - 무시해도 시스템 정상 작동):")
             print("-" * 70)
-            for holon_id, score in needs_improvement:
+            for holon_id, score in needs_improvement[:3]:  # 상위 3개만
                 print(f"\n📄 {holon_id} (현재 {score.total:.0%})")
-                for suggestion in score.suggestions[:5]:  # 최대 5개
+                for suggestion in score.suggestions[:3]:  # 최대 3개
                     print(f"   → {suggestion}")
+            if len(needs_improvement) > 3:
+                print(f"\n   ... 외 {len(needs_improvement) - 3}개 문서")
             print()
         
         # 요약
         print("=" * 70)
         avg_score = sum(s.total for s in self.scores.values()) / len(self.scores) if self.scores else 0
         
-        if avg_score >= PASS_THRESHOLD:
-            print(f"✅ SYSTEM HEALTHY - 평균 완성도 {avg_score:.0%} (기준: {PASS_THRESHOLD:.0%})")
-        else:
-            print(f"📝 IMPROVEMENT SUGGESTED - 평균 완성도 {avg_score:.0%} (기준: {PASS_THRESHOLD:.0%})")
-        
+        # Self-Healing: 항상 성공 (기록만)
+        print(f"🔥 Self-Healing 완료 - 평균 점수 {avg_score:.0%}")
+        print("   • 모든 이슈가 reports/에 기록되었습니다")
+        print("   • 시스템은 정상 작동합니다")
+        print("   • 수정은 선택사항입니다")
         print("=" * 70)
-        print()
-        
-        # 통계
-        print("📊 통계:")
-        print(f"   총 문서: {len(self.holons)}개")
-        print(f"   통과 (≥90%): {len(passed_docs)}개")
-        print(f"   개선 권장 (<90%): {len(needs_improvement)}개")
-        print(f"   평균 완성도: {avg_score:.0%}")
-        print()
-        
-        # 90% 원칙 설명
-        print("ℹ️  90% 완성도 원칙:")
-        print("   • 나머지 10%는 현실 세계 불확실성을 위한 버퍼")
-        print("   • 개선 제안은 선택사항 (강제 수정 없음)")
-        print("   • 무한 루프 방지, 경직성 완화")
 
 
 def main():
+    """Self-Healing 모드: 항상 성공 (exit 0)"""
     script_dir = Path(__file__).parent
     base_path = script_dir.parent
     
     validator = HolarchyValidator(str(base_path))
     validator.run_all_validations()
+    
+    # Self-Healing: 항상 성공 반환 (시스템 중단 없음)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    exit(main())

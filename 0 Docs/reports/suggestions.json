@@ -1,0 +1,33 @@
+{
+  "generated_at": "2025-11-30T13:03:45.970261",
+  "suggestions": [
+    {
+      "holon_id": "feature-2025-001",
+      "current_score": 87,
+      "target_score": 90,
+      "suggestions": [
+        "플레이스홀더 21개 발견 - 내용 채움 권장",
+        "상위 키워드 추가 권장: {'시장'}"
+      ]
+    },
+    {
+      "holon_id": "feature-2025-002",
+      "current_score": 87,
+      "target_score": 90,
+      "suggestions": [
+        "플레이스홀더 1개 발견 - 내용 채움 권장",
+        "상위 키워드 추가 권장: {'학원', '자동화'}"
+      ]
+    },
+    {
+      "holon_id": "hte-framework-001",
+      "current_score": 74,
+      "target_score": 90,
+      "suggestions": [
+        "플레이스홀더 2개 발견 - 내용 채움 권장",
+        "상위 키워드 추가 권장: {'학원', '전국', '수학'}"
+      ]
+    }
+  ],
+  "system_note": "자동 생성된 수정 추천 목록 (선택사항)"
+}
