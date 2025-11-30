@@ -258,7 +258,38 @@ class HolonCreator:
         print(f"   holon_id: {holon_id}")
         print(f"   parent: {parent_id or 'None (ROOT)'}")
         
+        # 자동 검증 실행
+        self._run_post_creation_check(holon_id, resonance_keywords)
+        
         return holon_id
+    
+    def _run_post_creation_check(self, holon_id: str, resonance_keywords: list) -> None:
+        """생성 후 자동 검증 및 안내"""
+        print()
+        print("-" * 60)
+        print("🔍 생성 후 자동 검증")
+        print("-" * 60)
+        
+        # 플레이스홀더 개수 경고
+        placeholder_count = 57  # 템플릿 기본 플레이스홀더 수
+        print(f"⚠️  현재 완성도: 약 0% (플레이스홀더 {placeholder_count}개)")
+        print(f"   → 내용을 채워 70% 이상으로 올려주세요")
+        
+        # 필수 키워드 안내
+        required_keywords = ["전국", "수학", "학원", "AI", "자동화", "시장"]
+        if resonance_keywords:
+            print()
+            print(f"📌 W.will.drive에 포함해야 할 핵심 키워드:")
+            for kw in resonance_keywords:
+                print(f"   ✓ {kw}")
+        else:
+            print()
+            print(f"📌 W.will.drive에 다음 키워드 중 일부 포함 권장:")
+            for kw in required_keywords:
+                print(f"   • {kw}")
+        
+        print()
+        print("💡 상위 W와의 공명(Resonance)을 위해 키워드를 포함하세요")
 
 
 def main():

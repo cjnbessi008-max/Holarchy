@@ -4,7 +4,6 @@
   "slug": "holarchy-overview",
   "type": "strategy",
   "module": "M00_Astral",
-
   "meta": {
     "title": "Self-Evolving Global K-12 EdTech Company with WXSPERTA Holonic Architecture",
     "owner": "HTE",
@@ -13,7 +12,6 @@
     "priority": "critical",
     "status": "active"
   },
-
   "W": {
     "worldview": {
       "identity": "전국 최고의 AI 기반 자기진화형 K-12 수학 교육 기업",
@@ -23,38 +21,77 @@
     "will": {
       "drive": "전국 수학 학원 시장을 독점하는 자기진화형 교육 시스템을 반드시 구축한다",
       "commitment": "어떤 기술적 복잡성도 홀론 구조로 정복하고, 어떤 시장 장벽도 돌파한다",
-      "non_negotiables": ["학생 학습 효과", "시스템 자기진화 능력", "홀론 구조 일관성", "AI 통합"]
+      "non_negotiables": [
+        "학생 학습 효과",
+        "시스템 자기진화 능력",
+        "홀론 구조 일관성",
+        "AI 통합"
+      ]
     },
     "intention": {
       "primary": "글로벌 K-12 에듀테크 기업을 홀론 기반 자기진화형 조직으로 설계하고 시장 지배",
-      "secondary": ["WXSPERTA 전 부서 적용", "AI 튜터 개인화 완성", "전국 학원 네트워크 구축"],
-      "constraints": ["품질 저하 없이 확장", "의지 약화 경로 차단", "복잡성 최소화"]
+      "secondary": [
+        "WXSPERTA 전 부서 적용",
+        "AI 튜터 개인화 완성",
+        "전국 학원 네트워크 구축"
+      ],
+      "constraints": [
+        "품질 저하 없이 확장",
+        "의지 약화 경로 차단",
+        "복잡성 최소화"
+      ]
     },
     "goal": {
       "ultimate": "전국 규모 AI 수학 학원 자동화 플랫폼으로 시장 독점",
-      "milestones": ["1개 학원 MVP", "10개 학원 확장", "100개 학원 표준화", "전국 확장"],
-      "kpi": ["MAU 성장률", "학습 완료율 90%+", "사용자 만족도 4.5+", "자기진화 지표"],
+      "milestones": [
+        "1개 학원 MVP",
+        "10개 학원 확장",
+        "100개 학원 표준화",
+        "전국 확장"
+      ],
+      "kpi": [
+        "MAU 성장률",
+        "학습 완료율 90%+",
+        "사용자 만족도 4.5+",
+        "자기진화 지표"
+      ],
       "okr": {
         "objective": "자기진화형 교육 플랫폼으로서 시장 지배적 위치 확립",
-        "key_results": ["WXSPERTA 모델 전 부서 적용", "홀론 기반 제품 아키텍처 구축", "적응형 운영 전략 실행"]
+        "key_results": [
+          "WXSPERTA 모델 전 부서 적용",
+          "홀론 기반 제품 아키텍처 구축",
+          "적응형 운영 전략 실행"
+        ]
       }
     },
     "activation": {
-      "triggers": ["MAU 성장 둔화", "학습 완료율 하락", "시스템 복잡성 증가", "의지 약화 감지"],
+      "triggers": [
+        "MAU 성장 둔화",
+        "학습 완료율 하락",
+        "시스템 복잡성 증가",
+        "의지 약화 감지"
+      ],
       "resonance_check": "모든 하위 홀론(조직/제품/운영/투자/API)이 이 W와 공명하는가?",
       "drift_detection": "핵심 목표에서 벗어나는 기능 추가, 복잡성 증가는 경고 신호"
     }
   },
-
   "X": {
     "context": "전통적 계층 조직의 한계를 극복하고 적응형 조직 구조 필요",
     "current_state": "WXSPERTA 홀론 아키텍처 설계 완료, 실행 단계 진입",
     "heartbeat": "weekly",
-    "signals": ["시장 변화", "사용자 피드백", "기술 트렌드", "경쟁사 동향"],
-    "constraints": ["리소스 제한", "시장 불확실성", "기술 복잡성"],
+    "signals": [
+      "시장 변화",
+      "사용자 피드백",
+      "기술 트렌드",
+      "경쟁사 동향"
+    ],
+    "constraints": [
+      "리소스 제한",
+      "시장 불확실성",
+      "기술 복잡성"
+    ],
     "will": "실시간 환경 변화를 감지하고 전략에 반영하려는 적극적 의지"
   },
-
   "S": {
     "resources": [
       "조직 구조 설계 (01-organizational-structure)",
@@ -64,41 +101,66 @@
       "API 시스템 (05-api-system)"
     ],
     "dependencies": [],
-    "access_points": ["이 문서가 전체 Holarchy의 Root Index"],
+    "access_points": [
+      "이 문서가 전체 Holarchy의 Root Index"
+    ],
     "structure_model": "Holonic Hierarchy with WXSPERTA",
-    "ontology_ref": ["WXSPERTA Framework", "Holonic Theory"],
+    "ontology_ref": [
+      "WXSPERTA Framework",
+      "Holonic Theory"
+    ],
     "readiness_score": 0.8,
     "will": "모든 하위 홀론에 필요한 구조적 기반을 제공하려는 의지"
   },
-
   "P": {
     "procedure_steps": [
       {
         "step_id": "p001",
         "description": "WXSPERTA 프레임워크 이해 및 내재화",
-        "inputs": ["WXSPERTA 정의", "홀론 이론"],
-        "expected_outputs": ["전 조직 이해 완료"],
-        "tools_required": ["문서", "교육"]
+        "inputs": [
+          "WXSPERTA 정의",
+          "홀론 이론"
+        ],
+        "expected_outputs": [
+          "전 조직 이해 완료"
+        ],
+        "tools_required": [
+          "문서",
+          "교육"
+        ]
       },
       {
         "step_id": "p002",
         "description": "부서별 홀론 구조 설계",
-        "inputs": ["조직 현황", "목표"],
-        "expected_outputs": ["부서별 WXSPERTA 정의"],
-        "tools_required": ["워크샵", "템플릿"]
+        "inputs": [
+          "조직 현황",
+          "목표"
+        ],
+        "expected_outputs": [
+          "부서별 WXSPERTA 정의"
+        ],
+        "tools_required": [
+          "워크샵",
+          "템플릿"
+        ]
       },
       {
         "step_id": "p003",
         "description": "제품 홀론 아키텍처 구축",
-        "inputs": ["제품 요구사항"],
-        "expected_outputs": ["Platform/Content/AI Tutor 홀론"],
-        "tools_required": ["설계 도구"]
+        "inputs": [
+          "제품 요구사항"
+        ],
+        "expected_outputs": [
+          "Platform/Content/AI Tutor 홀론"
+        ],
+        "tools_required": [
+          "설계 도구"
+        ]
       }
     ],
     "optimization_logic": "최소 엔트로피로 홀론 간 정보 흐름 최적화",
     "will": "효율적이고 명확한 실행 경로를 설계하려는 의지"
   },
-
   "E": {
     "execution_plan": [
       {
@@ -120,11 +182,17 @@
         "role": "BE"
       }
     ],
-    "tooling": ["Cursor AI", "GitHub", "Notion"],
-    "edge_case_handling": ["저항 발생 시 점진적 도입", "기술 한계 시 대안 탐색"],
+    "tooling": [
+      "Cursor AI",
+      "GitHub",
+      "Notion"
+    ],
+    "edge_case_handling": [
+      "저항 발생 시 점진적 도입",
+      "기술 한계 시 대안 탐색"
+    ],
     "will": "계획을 실제 행동으로 전환하여 즉각적 가치를 창출하려는 의지"
   },
-
   "R": {
     "reflection_notes": [
       "홀론 구조는 자기 유사성으로 확장이 용이함",
@@ -139,15 +207,21 @@
     "future_prediction": "AI와 홀론 구조의 결합으로 진정한 자율 조직 실현 가능",
     "will": "지속적 성찰을 통해 더 나은 경로를 발견하려는 의지"
   },
-
   "T": {
-    "impact_channels": ["전체 조직", "파트너사", "교육 시장"],
+    "impact_channels": [
+      "전체 조직",
+      "파트너사",
+      "교육 시장"
+    ],
     "traffic_model": "Top-down 전략 → Bottom-up 실행 피드백",
     "viral_mechanics": "성공 사례 공유를 통한 내부 확산",
-    "bottleneck_points": ["변화 저항", "이해 부족", "리소스 제약"],
+    "bottleneck_points": [
+      "변화 저항",
+      "이해 부족",
+      "리소스 제약"
+    ],
     "will": "홀론 아키텍처의 가치를 조직 전체에 전파하려는 의지"
   },
-
   "A": {
     "abstraction": "WXSPERTA 홀론 모델을 범용 조직 설계 프레임워크로 추상화",
     "modularization": [
@@ -164,11 +238,20 @@
     "resonance_logic": "상위 홀론의 의지가 하위 홀론에 공명하여 일관된 방향성 유지",
     "will": "이 프레임워크를 고도화하여 다른 조직에도 적용 가능한 범용 모델로 발전시키려는 의지"
   },
-
   "links": {
     "parent": null,
-    "children": ["hte-doc-001", "hte-doc-002", "hte-doc-003", "hte-doc-004", "hte-doc-005"],
-    "related": ["hte-framework-001", "strategy-2025-001"],
+    "children": [
+      "hte-doc-001",
+      "hte-doc-002",
+      "hte-doc-003",
+      "hte-doc-004",
+      "hte-doc-005",
+      "hte-framework-001"
+    ],
+    "related": [
+      "hte-framework-001",
+      "strategy-2025-001"
+    ],
     "supersedes": null
   }
 }

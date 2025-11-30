@@ -272,7 +272,8 @@
   "links": {
     "parent": "hte-doc-000",
     "children": [
-      "feature-2025-001"
+      "feature-2025-001",
+      "feature-2025-002"
     ],
     "related": [
       "hte-doc-001",

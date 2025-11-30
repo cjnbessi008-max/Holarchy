@@ -4,7 +4,6 @@
   "slug": "wxsperta-framework",
   "type": "structure",
   "module": "M18_InformationBlocks",
-
   "meta": {
     "title": "WXSPERTA Framework - 8가지 지능 블록 정의",
     "owner": "HTE",
@@ -13,7 +12,6 @@
     "priority": "critical",
     "status": "active"
   },
-
   "W": {
     "worldview": {
       "identity": "모든 홀론에 생명력을 부여하는 8가지 지능 프레임워크",
@@ -23,38 +21,70 @@
     "will": {
       "drive": "WXSPERTA를 통해 모든 문서가 실행 가능한 지능 세포가 되도록 반드시 만든다",
       "commitment": "기존 정적 문서 문화를 완전히 전환한다",
-      "non_negotiables": ["W의 4요소 (Worldview/Will/Intention/Goal)", "의지 보존", "8지능 완전성"]
+      "non_negotiables": [
+        "W의 4요소 (Worldview/Will/Intention/Goal)",
+        "의지 보존",
+        "8지능 완전성"
+      ]
     },
     "intention": {
       "primary": "WXSPERTA 프레임워크의 8가지 지능 유형을 정의하고 각 의지(Will)를 명확히 함",
-      "secondary": ["모든 문서 표준화", "의지 기반 실행 문화 정착"],
-      "constraints": ["학습 곡선 관리", "점진적 적용"]
+      "secondary": [
+        "모든 문서 표준화",
+        "의지 기반 실행 문화 정착"
+      ],
+      "constraints": [
+        "학습 곡선 관리",
+        "점진적 적용"
+      ]
     },
     "goal": {
       "ultimate": "WXSPERTA가 회사 전체 문서 표준이 되어 모든 홀론이 의지를 가지고 동작",
-      "milestones": ["프레임워크 정의", "핵심 문서 적용", "전체 문서 마이그레이션"],
-      "kpi": ["WXSPERTA 적용률 100%", "의지 보존율", "문서 실행력"],
+      "milestones": [
+        "프레임워크 정의",
+        "핵심 문서 적용",
+        "전체 문서 마이그레이션"
+      ],
+      "kpi": [
+        "WXSPERTA 적용률 100%",
+        "의지 보존율",
+        "문서 실행력"
+      ],
       "okr": {
         "objective": "WXSPERTA를 회사 전체 문서 표준으로 확립",
-        "key_results": ["모든 문서 WXSPERTA 적용", "8가지 지능 정의 내재화", "의지 기반 실행 문화 정착"]
+        "key_results": [
+          "모든 문서 WXSPERTA 적용",
+          "8가지 지능 정의 내재화",
+          "의지 기반 실행 문화 정착"
+        ]
       }
     },
     "activation": {
-      "triggers": ["새 문서 생성 시", "기존 문서 검토 시", "의지 약화 감지 시"],
+      "triggers": [
+        "새 문서 생성 시",
+        "기존 문서 검토 시",
+        "의지 약화 감지 시"
+      ],
       "resonance_check": "모든 문서의 W가 상위 홀론의 W와 공명하는가?",
       "drift_detection": "W 없는 문서, 의지 없는 실행은 경고 신호"
     }
   },
-
   "X": {
     "context": "기존 문서는 정보 저장소일 뿐 실행력이 없음",
     "current_state": "WXSPERTA 프레임워크 정의 완료, 적용 확산 중",
     "heartbeat": "daily",
-    "signals": ["문서 품질", "실행 연결성", "의지 명확성"],
-    "constraints": ["학습 곡선", "기존 습관", "복잡성 인식"],
+    "signals": [
+      "문서 품질",
+      "실행 연결성",
+      "의지 명확성"
+    ],
+    "constraints": [
+      "학습 곡선",
+      "기존 습관",
+      "복잡성 인식"
+    ],
     "will": "현재 문서 생태계의 한계를 파악하고 WXSPERTA로 전환하려는 의지"
   },
-
   "S": {
     "resources": [
       "W - 세계관 지능",
@@ -67,76 +97,138 @@
       "A - 고도화 지능"
     ],
     "dependencies": [],
-    "access_points": ["이 문서", "Holon 템플릿"],
+    "access_points": [
+      "이 문서",
+      "Holon 템플릿"
+    ],
     "structure_model": "8가지 지능의 순환적 상호작용",
-    "ontology_ref": ["Holonic Theory", "Collective Intelligence"],
+    "ontology_ref": [
+      "Holonic Theory",
+      "Collective Intelligence"
+    ],
     "readiness_score": 1.0,
     "will": "8가지 지능 구조를 명확히 정의하여 즉시 사용 가능하게 하려는 의지"
   },
-
   "P": {
     "procedure_steps": [
       {
         "step_id": "wx-p001",
         "description": "W(세계관)로 목적과 방향 설정",
-        "inputs": ["비전", "가치관", "목표"],
-        "expected_outputs": ["명확한 목적 선언"],
-        "tools_required": ["W 템플릿"]
+        "inputs": [
+          "비전",
+          "가치관",
+          "목표"
+        ],
+        "expected_outputs": [
+          "명확한 목적 선언"
+        ],
+        "tools_required": [
+          "W 템플릿"
+        ]
       },
       {
         "step_id": "wx-p002",
         "description": "X(문맥)로 현재 상황 파악",
-        "inputs": ["현재 데이터", "환경", "제약"],
-        "expected_outputs": ["상황 인식"],
-        "tools_required": ["X 템플릿"]
+        "inputs": [
+          "현재 데이터",
+          "환경",
+          "제약"
+        ],
+        "expected_outputs": [
+          "상황 인식"
+        ],
+        "tools_required": [
+          "X 템플릿"
+        ]
       },
       {
         "step_id": "wx-p003",
         "description": "S(구조)로 리소스 체계화",
-        "inputs": ["가용 리소스", "의존성"],
-        "expected_outputs": ["구조화된 리소스맵"],
-        "tools_required": ["S 템플릿"]
+        "inputs": [
+          "가용 리소스",
+          "의존성"
+        ],
+        "expected_outputs": [
+          "구조화된 리소스맵"
+        ],
+        "tools_required": [
+          "S 템플릿"
+        ]
       },
       {
         "step_id": "wx-p004",
         "description": "P(절차)로 실행 단계 설계",
-        "inputs": ["목표", "리소스"],
-        "expected_outputs": ["최적화된 절차"],
-        "tools_required": ["P 템플릿"]
+        "inputs": [
+          "목표",
+          "리소스"
+        ],
+        "expected_outputs": [
+          "최적화된 절차"
+        ],
+        "tools_required": [
+          "P 템플릿"
+        ]
       },
       {
         "step_id": "wx-p005",
         "description": "E(실행)로 실제 행동",
-        "inputs": ["절차", "도구"],
-        "expected_outputs": ["실행 결과"],
-        "tools_required": ["E 템플릿"]
+        "inputs": [
+          "절차",
+          "도구"
+        ],
+        "expected_outputs": [
+          "실행 결과"
+        ],
+        "tools_required": [
+          "E 템플릿"
+        ]
       },
       {
         "step_id": "wx-p006",
         "description": "R(성찰)로 결과 분석",
-        "inputs": ["실행 결과", "기대치"],
-        "expected_outputs": ["통찰", "개선점"],
-        "tools_required": ["R 템플릿"]
+        "inputs": [
+          "실행 결과",
+          "기대치"
+        ],
+        "expected_outputs": [
+          "통찰",
+          "개선점"
+        ],
+        "tools_required": [
+          "R 템플릿"
+        ]
       },
       {
         "step_id": "wx-p007",
         "description": "T(전파)로 가치 확산",
-        "inputs": ["성과", "학습"],
-        "expected_outputs": ["공유된 지식"],
-        "tools_required": ["T 템플릿"]
+        "inputs": [
+          "성과",
+          "학습"
+        ],
+        "expected_outputs": [
+          "공유된 지식"
+        ],
+        "tools_required": [
+          "T 템플릿"
+        ]
       },
       {
         "step_id": "wx-p008",
         "description": "A(고도화)로 추상화 및 통합",
-        "inputs": ["전체 경험"],
-        "expected_outputs": ["모듈화된 자산"],
-        "tools_required": ["A 템플릿"]
+        "inputs": [
+          "전체 경험"
+        ],
+        "expected_outputs": [
+          "모듈화된 자산"
+        ],
+        "tools_required": [
+          "A 템플릿"
+        ]
       }
     ],
     "optimization_logic": "W→X→S→P→E→R→T→A 순환으로 지속 개선",
     "will": "8단계 절차를 최적화하여 효율적 실행을 가능하게 하려는 의지"
   },
-
   "E": {
     "execution_plan": [
       {
@@ -158,14 +250,17 @@
         "role": "PM"
       }
     ],
-    "tooling": ["Cursor AI", "Notion", "GitHub"],
+    "tooling": [
+      "Cursor AI",
+      "Notion",
+      "GitHub"
+    ],
     "edge_case_handling": [
       "이해 부족: 추가 교육",
       "저항: 성공 사례로 설득"
     ],
     "will": "WXSPERTA를 실제로 적용하여 가치를 증명하려는 의지"
   },
-
   "R": {
     "reflection_notes": [
       "의지(Will)가 각 지능의 핵심 동력",
@@ -180,35 +275,50 @@
     "future_prediction": "AI가 WXSPERTA 문서를 자동 생성하고 실행",
     "will": "지속적 성찰로 프레임워크를 개선하려는 의지"
   },
-
   "T": {
-    "impact_channels": ["전체 조직", "파트너", "커뮤니티"],
+    "impact_channels": [
+      "전체 조직",
+      "파트너",
+      "커뮤니티"
+    ],
     "traffic_model": "내부 성공 → 외부 공유 → 표준화",
     "viral_mechanics": "WXSPERTA의 효과를 체험한 사람들이 전파",
-    "bottleneck_points": ["학습 곡선", "기존 습관"],
+    "bottleneck_points": [
+      "학습 곡선",
+      "기존 습관"
+    ],
     "will": "WXSPERTA의 가치를 널리 전파하려는 의지"
   },
-
   "A": {
     "abstraction": "WXSPERTA를 범용 지능 프레임워크로 추상화",
     "modularization": [
-      "W 모듈", "X 모듈", "S 모듈", "P 모듈",
-      "E 모듈", "R 모듈", "T 모듈", "A 모듈"
+      "W 모듈",
+      "X 모듈",
+      "S 모듈",
+      "P 모듈",
+      "E 모듈",
+      "R 모듈",
+      "T 모듈",
+      "A 모듈"
     ],
     "automation_opportunities": [
       "WXSPERTA 자동 검증",
       "의지 일관성 체크",
       "문서 자동 생성"
     ],
-    "integration_targets": ["hte-doc-000"],
+    "integration_targets": [
+      "hte-doc-000"
+    ],
     "resonance_logic": "모든 홀론이 WXSPERTA로 공명하여 일관된 시스템 형성",
     "will": "WXSPERTA를 고도화하여 자동화된 지능 시스템을 구축하려는 의지"
   },
-
   "links": {
-    "parent": null,
+    "parent": "hte-doc-000",
     "children": [],
-    "related": ["hte-doc-000", "strategy-2025-001"],
+    "related": [
+      "strategy-2025-001",
+      "hte-doc-000"
+    ],
     "supersedes": null
   }
 }

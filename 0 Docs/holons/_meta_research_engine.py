@@ -36,7 +36,7 @@ import math
 
 SIMILARITY_THRESHOLD = 0.6  # 중복 의심 임계값
 CONFLICT_THRESHOLD = 0.4   # 충돌 가능성 임계값
-DRIFT_THRESHOLD = 0.3      # drift 감지 임계값
+DRIFT_THRESHOLD = 0.5      # drift 감지 임계값 (30% → 50% 조정)
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
