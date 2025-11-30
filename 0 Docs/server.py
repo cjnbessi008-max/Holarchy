@@ -56,6 +56,38 @@ def create_meeting():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route('/api/place', methods=['POST'])
+def place_document():
+    """문서 자동 배치 API - HTE 모듈 폴더에 생성"""
+    try:
+        from _document_placer import DocumentPlacer
+        
+        data = request.json
+        text = data.get('text', '')
+        doc_type = data.get('type', 'auto')
+        
+        if not text.strip():
+            return jsonify({"error": "문서 내용이 비어있습니다"}), 400
+        
+        placer = DocumentPlacer()
+        result = placer.create_document(text, doc_type=doc_type)
+        
+        return jsonify({
+            "success": True,
+            "holon_id": result["holon_id"],
+            "module": result["module"],
+            "filename": result["filename"],
+            "filepath": result["filepath"],
+            "confidence": result["confidence"],
+            "matched_keywords": result["matched_keywords"],
+            "title": result["title"],
+            "decisions": result["decisions"],
+            "tasks": result["tasks"]
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route('/api/check', methods=['POST'])
 def run_check():
     """Self-Healing 검증 API"""

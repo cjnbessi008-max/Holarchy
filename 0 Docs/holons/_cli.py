@@ -183,6 +183,57 @@ def cmd_spawn(args):
     spawner.spawn(args.meeting_id)
 
 
+def cmd_place(args):
+    """문서 자동 배치 - HTE 모듈 폴더에 파일명 규칙 적용"""
+    from _document_placer import DocumentPlacer
+    
+    placer = DocumentPlacer()
+    
+    if args.file:
+        # 파일에서 읽기
+        file_path = Path(args.file)
+        if not file_path.exists():
+            print(f"❌ 파일을 찾을 수 없습니다: {args.file}")
+            return
+        text = file_path.read_text(encoding="utf-8")
+    elif args.text:
+        # 직접 텍스트 입력
+        text = args.text
+    else:
+        # 대화형 입력
+        print("=" * 60)
+        print("📝 문서 내용을 입력하세요 (빈 줄 2번으로 종료):")
+        print("=" * 60)
+        lines = []
+        empty_count = 0
+        while True:
+            try:
+                line = input()
+                if line == "":
+                    empty_count += 1
+                    if empty_count >= 2:
+                        break
+                else:
+                    empty_count = 0
+                lines.append(line)
+            except EOFError:
+                break
+        text = "\n".join(lines)
+    
+    if not text.strip():
+        print("❌ 문서 내용이 비어있습니다")
+        return
+    
+    # 배치 및 생성
+    result = placer.create_document(text, doc_type=args.type or "auto")
+    
+    print()
+    print("💡 생성 완료!")
+    print(f"   모듈: {result['module']}")
+    print(f"   파일: {result['filename']}")
+    print(f"   경로: {result['filepath']}")
+
+
 def cmd_status(args):
     """시스템 상태 확인"""
     import json
@@ -421,11 +472,18 @@ def cmd_help(args):
 ║    type: strategy, structure, feature, meeting,              ║
 ║          decision, task                                      ║
 ║                                                              ║
-║  🚀 회의 자동화 (NEW)                                        ║
+║  🚀 자동 배치 (HTE 모듈)                                     ║
+║  ──────────────────────────────────────────────────────────  ║
+║  place               문서 → HTE 모듈 자동 배치               ║
+║  place -f 파일       파일에서 읽어서 배치                    ║
+║  place -t "내용"     텍스트로 직접 배치                      ║
+║                                                              ║
+║  * 내용 분석 → M00~M21 모듈 자동 선택                        ║
+║  * 파일명: HTE_MXX_PYY_TZZ_V00_A00.md                        ║
+║                                                              ║
+║  🚀 회의 자동화                                              ║
 ║  ──────────────────────────────────────────────────────────  ║
 ║  meeting             회의록 자동 파싱 & Holon 생성           ║
-║  meeting -f 파일     파일에서 회의록 읽기                    ║
-║  meeting -t "내용"   텍스트 직접 입력                        ║
 ║  spawn <meeting_id>  회의에서 Decision/Task 생성             ║
 ║                                                              ║
 ║  🧠 Working Memory                                           ║
@@ -493,12 +551,20 @@ def main():
     parser_spawn.add_argument("meeting_id", help="Meeting holon_id")
     parser_spawn.set_defaults(func=cmd_spawn)
     
-    # meeting (NEW - 회의록 자동 파싱)
+    # meeting (회의록 자동 파싱)
     parser_meeting = subparsers.add_parser("meeting", help="회의록 자동 파싱 & Holon 생성")
     parser_meeting.add_argument("--file", "-f", help="회의록 파일 경로 (.txt, .md)")
     parser_meeting.add_argument("--text", "-t", help="회의록 텍스트 직접 입력")
     parser_meeting.add_argument("--no-spawn", action="store_true", help="Decision/Task 자동 생성 안함")
     parser_meeting.set_defaults(func=cmd_meeting)
+    
+    # place (NEW - HTE 모듈 자동 배치)
+    parser_place = subparsers.add_parser("place", help="문서 자동 배치 - HTE 모듈 폴더에 생성")
+    parser_place.add_argument("--file", "-f", help="문서 파일 경로")
+    parser_place.add_argument("--text", "-t", help="문서 내용 직접 입력")
+    parser_place.add_argument("--type", choices=["meeting", "strategy", "feature", "task", "decision", "auto"], 
+                             default="auto", help="문서 타입")
+    parser_place.set_defaults(func=cmd_place)
     
     # chunk
     parser_chunk = subparsers.add_parser("chunk", help="W 기반 Active Chunk 관리")
