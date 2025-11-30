@@ -142,6 +142,39 @@ def cmd_status(args):
     print("=" * 60)
 
 
+def cmd_chunk(args):
+    """W 기반 Active Chunk 관리"""
+    from _chunk_engine import ChunkManager
+    
+    script_dir = Path(__file__).parent
+    manager = ChunkManager(str(script_dir.parent))
+    
+    if args.action == "generate":
+        print("📂 Holon 로드 중...")
+        manager.load_holons()
+        print(f"   로드된 문서: {len(manager.holons)}개")
+        print()
+        
+        print("🧮 W 기반 Salience 계산 중...")
+        manager.generate_chunks()
+        manager.save_chunks()
+        print(f"   생성된 Chunk: {len(manager.chunks)}개")
+        print()
+        
+        manager.print_report()
+    
+    else:  # show
+        manager.load_holons()
+        chunks = manager.load_chunks()
+        if chunks:
+            manager.chunks = chunks
+            manager.root_w = manager.find_root_w()
+            manager.print_report()
+        else:
+            print("❌ 저장된 Chunk 없음")
+            print("💡 'python _cli.py chunk generate' 먼저 실행하세요")
+
+
 def cmd_help(args):
     """도움말"""
     print("""
@@ -171,6 +204,14 @@ def cmd_help(args):
 ║                                                              ║
 ║  예시:                                                       ║
 ║    spawn meeting-2025-001                                    ║
+║                                                              ║
+║  🧠 Working Memory (Chunk 시스템)                            ║
+║  ──────────────────────────────────────────────────────────  ║
+║  chunk generate    W 기반 중요도로 Active Chunk 생성         ║
+║  chunk show        현재 Active Chunk 표시                    ║
+║                                                              ║
+║  * Chunk는 W(의지)와의 공명도로 중요도 판단                  ║
+║  * 항상 Top-7만 유지 (인간 작업기억 모방)                    ║
 ║                                                              ║
 ╚══════════════════════════════════════════════════════════════╝
     """)
@@ -204,6 +245,12 @@ def main():
     parser_spawn = subparsers.add_parser("spawn", help="Meeting에서 Decision/Task 생성")
     parser_spawn.add_argument("meeting_id", help="Meeting holon_id")
     parser_spawn.set_defaults(func=cmd_spawn)
+    
+    # chunk
+    parser_chunk = subparsers.add_parser("chunk", help="W 기반 Active Chunk 관리")
+    parser_chunk.add_argument("action", choices=["generate", "show"], nargs="?", default="show",
+                             help="generate: 새로 생성, show: 현재 표시")
+    parser_chunk.set_defaults(func=cmd_chunk)
     
     # status
     parser_status = subparsers.add_parser("status", help="시스템 상태")

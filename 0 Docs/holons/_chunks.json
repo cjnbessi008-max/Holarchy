@@ -1,0 +1,230 @@
+{
+  "generated_at": "2025-11-30T11:47:19.031670",
+  "root_w_keywords": [
+    "반드시",
+    "효과",
+    "수학",
+    "한다",
+    "시장을",
+    "홀론",
+    "능력",
+    "통합",
+    "기업",
+    "기반",
+    "수학을",
+    "보존",
+    "미션의",
+    "자기",
+    "구축한다",
+    "정복하고",
+    "의지",
+    "구조",
+    "기술적",
+    "구조로",
+    "장벽도",
+    "진화를",
+    "학생",
+    "시스템",
+    "가능하게",
+    "학원",
+    "함께",
+    "구조는",
+    "정복할",
+    "엔트로피",
+    "조화",
+    "교육",
+    "성장",
+    "전체",
+    "전국",
+    "12",
+    "모든",
+    "시장",
+    "자기진화형",
+    "돌파한다",
+    "최고의",
+    "무한",
+    "자율성과",
+    "학습",
+    "시스템을",
+    "독점하는",
+    "복잡성도",
+    "일관성",
+    "자기진화",
+    "학생이",
+    "확장과",
+    "ai",
+    "최소",
+    "어떤"
+  ],
+  "max_chunks": 7,
+  "chunks": [
+    {
+      "id": "chunk-001",
+      "title": "Self-Evolving Global K-12 EdTech Company with WXSPERTA Holonic Architecture",
+      "why_important": "전국 수학 학원 시장을 독점하는 자기진화형 교육 시스템을 반드시 구축한다",
+      "linked_holons": [
+        "hte-doc-000"
+      ],
+      "hypotheses": [],
+      "next_actions": [
+        "전 조직 WXSPERTA 교육",
+        "부서별 홀론 정의 워크샵",
+        "제품 아키텍처 구현"
+      ],
+      "salience_score": 1.0,
+      "score_breakdown": {
+        "will_resonance": 1.0,
+        "goal_relevance": 1.0,
+        "intention_alignment": 1.0,
+        "recency": 1.0
+      },
+      "created_at": "2025-11-30",
+      "updated_at": "2025-11-30",
+      "status": "active"
+    },
+    {
+      "id": "chunk-002",
+      "title": "Product Architecture Holons: Learning Platform, Content, AI Tutor",
+      "why_important": "전국 수학 학원 시장 독점을 위해 세 홀론(Platform/Content/AI Tutor)의 완벽한 통합으로 최고의 개인화 수학 학습 경험을 반드시 제공한다",
+      "linked_holons": [
+        "hte-doc-002"
+      ],
+      "hypotheses": [],
+      "next_actions": [
+        "Platform 코어 개발",
+        "Content CMS 구축",
+        "AI Tutor 모델 개발"
+      ],
+      "salience_score": 0.813,
+      "score_breakdown": {
+        "will_resonance": 0.639,
+        "goal_relevance": 0.857,
+        "intention_alignment": 1.0,
+        "recency": 1.0
+      },
+      "created_at": "2025-11-30",
+      "updated_at": "2025-11-30",
+      "status": "active"
+    },
+    {
+      "id": "chunk-003",
+      "title": "API System and Execution Platform: Holonic Integration & Data Flow",
+      "why_important": "전국 수학 학원 시장 독점을 위해 모든 홀론을 실시간으로 연결하는 API 중심 실행 시스템을 반드시 구축한다",
+      "linked_holons": [
+        "hte-doc-005"
+      ],
+      "hypotheses": [],
+      "next_actions": [
+        "API Gateway 구축",
+        "Platform API 개발",
+        "AI API 개발"
+      ],
+      "salience_score": 0.802,
+      "score_breakdown": {
+        "will_resonance": 0.611,
+        "goal_relevance": 0.857,
+        "intention_alignment": 1.0,
+        "recency": 1.0
+      },
+      "created_at": "2025-11-30",
+      "updated_at": "2025-11-30",
+      "status": "active"
+    },
+    {
+      "id": "chunk-004",
+      "title": "Holonic Organizational Structure (WXSPERTA Model)",
+      "why_important": "전국 수학 학원 시장 독점을 위해 모든 부서와 팀을 홀론으로 설계하여 자율성과 전체 미션 정렬을 반드시 달성한다",
+      "linked_holons": [
+        "hte-doc-001"
+      ],
+      "hypotheses": [],
+      "next_actions": [
+        "부서장 대상 WXSPERTA 교육",
+        "부서별 Holon 정의 워크샵",
+        "Holon 기반 OKR 설정"
+      ],
+      "salience_score": 0.789,
+      "score_breakdown": {
+        "will_resonance": 0.472,
+        "goal_relevance": 1.0,
+        "intention_alignment": 1.0,
+        "recency": 1.0
+      },
+      "created_at": "2025-11-30",
+      "updated_at": "2025-11-30",
+      "status": "active"
+    },
+    {
+      "id": "chunk-005",
+      "title": "Holonic Operations Strategy: Continuous Evolution and Learning Loops",
+      "why_important": "전국 수학 학원 시장 독점을 위해 회사가 진정으로 지능적으로 진화하도록 운영 체계를 반드시 구축한다",
+      "linked_holons": [
+        "hte-doc-003"
+      ],
+      "hypotheses": [],
+      "next_actions": [
+        "스프린트 체계 도입",
+        "KPI 대시보드 구축",
+        "실패 학습 프로세스 정립"
+      ],
+      "salience_score": 0.733,
+      "score_breakdown": {
+        "will_resonance": 0.333,
+        "goal_relevance": 1.0,
+        "intention_alignment": 1.0,
+        "recency": 1.0
+      },
+      "created_at": "2025-11-30",
+      "updated_at": "2025-11-30",
+      "status": "active"
+    },
+    {
+      "id": "chunk-006",
+      "title": "WXSPERTA Framework - 8가지 지능 블록 정의",
+      "why_important": "WXSPERTA를 통해 모든 문서가 실행 가능한 지능 세포가 되도록 반드시 만든다",
+      "linked_holons": [
+        "hte-framework-001"
+      ],
+      "hypotheses": [],
+      "next_actions": [
+        "WXSPERTA 교육 자료 제작",
+        "템플릿 배포",
+        "파일럿 적용"
+      ],
+      "salience_score": 0.711,
+      "score_breakdown": {
+        "will_resonance": 0.278,
+        "goal_relevance": 1.0,
+        "intention_alignment": 1.0,
+        "recency": 1.0
+      },
+      "created_at": "2025-11-30",
+      "updated_at": "2025-11-30",
+      "status": "active"
+    },
+    {
+      "id": "chunk-007",
+      "title": "Investment Structure and HolonMap Priorities",
+      "why_important": "전국 수학 학원 시장 독점을 위해 모든 투자가 시스템 전체의 진화와 시장 지배력 강화에 기여하도록 반드시 만든다",
+      "linked_holons": [
+        "hte-doc-004"
+      ],
+      "hypotheses": [],
+      "next_actions": [
+        "AI R&D 팀 확충",
+        "클라우드 인프라 확장",
+        "콘텐츠 제작 가속화"
+      ],
+      "salience_score": 0.649,
+      "score_breakdown": {
+        "will_resonance": 0.444,
+        "goal_relevance": 0.571,
+        "intention_alignment": 1.0,
+        "recency": 1.0
+      },
+      "created_at": "2025-11-30",
+      "updated_at": "2025-11-30",
+      "status": "active"
+    }
+  ]
+}
