@@ -199,6 +199,22 @@ def cmd_meta(args):
         print(f"📁 유사도 매트릭스: {matrix_file}")
 
 
+def cmd_health(args):
+    """시스템 건강 점검"""
+    from _health_check import HealthCheckEngine
+    
+    script_dir = Path(__file__).parent
+    engine = HealthCheckEngine(str(script_dir.parent))
+    
+    report = engine.run_all_checks()
+    engine.print_report(report)
+    
+    if args.action == "report":
+        report_file = engine.save_report(report)
+        print()
+        print(f"📄 리포트 저장: {report_file}")
+
+
 def cmd_help(args):
     """도움말"""
     print("""
@@ -242,10 +258,15 @@ def cmd_help(args):
 ║  meta analyze      프로젝트 간 관계 분석                     ║
 ║  meta report       정제 제안 리포트 생성                     ║
 ║                                                              ║
-║  * 중복/충돌 탐지                                            ║
-║  * Drift 분석 (상위 헌법 alignment)                          ║
-║  * 연구 프로세스 품질 검사                                   ║
-║  * 정제 제안 (merge/split/redirect)                          ║
+║  🏥 System Health Check                                      ║
+║  ──────────────────────────────────────────────────────────  ║
+║  health check      8개 영역 건강 점검                        ║
+║  health report     건강 점검 리포트 저장                     ║
+║                                                              ║
+║  * 상위 구조 안정성 / 프로젝트 폭발 위험                     ║
+║  * 링크 구조 붕괴 / 연구 프로세스 품질                       ║
+║  * 메타 엔진 / 문서 질 / 자동화 안정성                       ║
+║  * 사람 개입 지점 점검                                       ║
 ║                                                              ║
 ╚══════════════════════════════════════════════════════════════╝
     """)
@@ -291,6 +312,12 @@ def main():
     parser_meta.add_argument("action", choices=["analyze", "report"], nargs="?", default="analyze",
                             help="analyze: 분석, report: 리포트 생성")
     parser_meta.set_defaults(func=cmd_meta)
+    
+    # health
+    parser_health = subparsers.add_parser("health", help="시스템 건강 점검")
+    parser_health.add_argument("action", choices=["check", "report"], nargs="?", default="check",
+                              help="check: 점검, report: 리포트 저장")
+    parser_health.set_defaults(func=cmd_health)
     
     # status
     parser_status = subparsers.add_parser("status", help="시스템 상태")
